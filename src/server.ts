@@ -5,6 +5,7 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
+import { connectCloudinary } from './config/cloudinary.ts';
 import { connectDB } from './config/mongodb.ts';
 import { env } from './env.ts';
 
@@ -28,9 +29,10 @@ app.get('/health', () => {
 
 async function start() {
   try {
+    await connectDB();
+    connectCloudinary();
     await app.listen({ port: env.PORT });
     app.log.info(`Servidor rodando na porta ${env.PORT}`);
-    await connectDB();
   } catch (err) {
     app.log.error(err);
     process.exit(1);

@@ -11,5 +11,6 @@ export async function connectDB() {
     await mongoose.connect(`${env.MONGODB_URI}/quickcart`);
   } catch (error) {
     console.log('DB connect error:', error);
+    process.exit(1);
   }
 }
