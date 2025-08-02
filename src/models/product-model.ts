@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
-import type { ProductType } from '../schemas/product-schema.ts';
-
-const validSizes = ['S', 'M', 'L', 'XL', 'XXL'] as const;
+import {
+  type ProductType,
+  VALID_SIZES_ENUM,
+} from '../schemas/product-schema.ts';
 
 const productDBSchema = new mongoose.Schema<ProductType>(
   {
@@ -10,7 +11,7 @@ const productDBSchema = new mongoose.Schema<ProductType>(
     price: { type: Number, required: true },
     category: { type: String, required: true },
     image: { type: [String], required: true },
-    sizes: { type: [String], required: true, enum: validSizes },
+    sizes: { type: [String], required: true, enum: VALID_SIZES_ENUM },
     subCategory: { type: String, required: true },
     bestseller: { type: Boolean, default: false },
     date: { type: Number, required: true },

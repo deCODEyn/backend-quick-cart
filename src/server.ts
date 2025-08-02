@@ -8,6 +8,7 @@ import {
 import { connectCloudinary } from './config/cloudinary.ts';
 import { connectDB } from './config/mongodb.ts';
 import { env } from './env.ts';
+import { userRoute } from './routes/user-route.ts';
 
 const app = fastify({
   logger: {
@@ -23,9 +24,11 @@ app.register(fastifyCors, {
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);
 
-app.get('/health', () => {
+app.get('/api/health', () => {
   return 'Health check API: response OK';
 });
+
+app.register(userRoute);
 
 async function start() {
   try {

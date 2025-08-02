@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const validSizes = ['S', 'M', 'L', 'XL', 'XXL'] as const;
+export const VALID_SIZES_ENUM = ['S', 'M', 'L', 'XL', 'XXL'] as const;
 
 export const productSchema = z.object({
   _id: z.string().optional(),
@@ -16,7 +16,7 @@ export const productSchema = z.object({
     .min(1, 'The product must have at least one image.'),
   price: z.number().positive('The price must be a positive value.'),
   sizes: z
-    .array(z.enum(validSizes))
+    .array(z.enum(VALID_SIZES_ENUM))
     .min(1, 'The product must be at least one size.'),
   subCategory: z.string().min(1, 'A subcategoria é obrigatória.'),
 });
