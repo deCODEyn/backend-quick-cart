@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file .env --experimental-strip-types --no-warnings src/server.ts",
+    "dev": "node --env-file .env --experimental-strip-types --no-warnings --watch src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@biomejs/biome": "2.1.2",
+    "@types/node": "^24.1.0",
+    "typescript": "^5.9.2",
+    "ultracite": "5.1.2"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "cloudinary": "^2.7.0",
+    "dotenv": "^17.2.1",
+    "fastify": "^5.4.0",
+    "fastify-type-provider-zod": "^5.0.2",
+    "mongoose": "^8.17.0",
+    "zod": "^4.0.14"
+  }
+}
