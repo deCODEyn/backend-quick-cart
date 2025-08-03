@@ -1,8 +1,18 @@
 import bcrypt from 'bcrypt';
-import mongoose from 'mongoose';
+import mongoose, { type Document, type Model, type Types } from 'mongoose';
 import type { UserType } from '../schemas/user-schema.ts';
 
-const userDBSchema = new mongoose.Schema<UserType>(
+export interface UserDocumentInterface extends UserType, Document {
+  _id: Types.ObjectId;
+  comparePassword(candidatePassword: string): Promise<boolean>;
+}
+
+export interface UserModelInterface extends Model<UserDocumentInterface> {}
+
+const userDBSchema = new mongoose.Schema<
+  UserDocumentInterface,
+  UserModelInterface
+>(
   {
     name: { type: String, require: true },
     email: { type: String, require: true, unique: true },
@@ -24,5 +34,17 @@ userDBSchema.pre('save', async function (next) {
   }
 });
 
-export const userModel = (mongoose.models.user ||
-  mongoose.model<UserType>('user', userDBSchema)) as mongoose.Model<UserType>;
+userDBSchema.methods.comparePassword = async function (
+  candidatePassword: string
+): Promise<boolean> {
+  if (!this.password) {
+    return false;
+  }
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+export const userModel = ((mongoose.models.user as UserModelInterface) ||
+  mongoose.model<UserDocumentInterface, UserModelInterface>(
+    'user',
+    userDBSchema
+  )) as mongoose.Model<UserDocumentInterface, UserModelInterface>;

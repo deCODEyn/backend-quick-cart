@@ -34,10 +34,11 @@ app.register(userRoute);
 
 async function start() {
   try {
-    await connectDB();
+    await connectDB(app);
     connectCloudinary();
+
     await app.listen({ port: env.PORT });
-    app.log.info(`Servidor rodando na porta ${env.PORT}`);
+    app.log.info(`Server running on port ${env.PORT}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);

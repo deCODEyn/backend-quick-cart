@@ -1,10 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { userModel } from '../models/user-model.ts';
 import type {
   LoginBodyType,
   RegisterBodyType,
 } from '../schemas/routes-schemas/user-route-schema.ts';
-import { ConflictError } from '../utils/errors.ts';
+import { createUser, findUserByEmail } from '../services/user-service.ts';
+import { BadRequestError, ConflictError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
 
 export async function registerUser(
@@ -13,13 +13,12 @@ export async function registerUser(
 ) {
   const { name, email, password } = request.body;
 
-  const userExists = await userModel.findOne({ email });
+  const userExists = await findUserByEmail(email);
   if (userExists) {
     throw new ConflictError('User email already exists.');
   }
 
-  const newUser = new userModel({ name, email, password });
-  await newUser.save();
+  const newUser = await createUser({ name, email, password });
 
   const token = signToken({
     id: newUser._id.toString(),
@@ -37,13 +36,27 @@ export async function registerUser(
   });
 }
 
-export function loginUser(
+export async function loginUser(
   request: FastifyRequest<{ Body: LoginBodyType }>,
-  _reply: FastifyReply
+  reply: FastifyReply
 ) {
   const { email, password } = request.body;
 
-  return { msg: 'Login API Working', email, password };
+  const user = await findUserByEmail(email);
+  if (!user) {
+    throw new BadRequestError("User doesn't exists.");
+  }
+
+  const isMatch = await user.comparePassword(password);
+  if (isMatch) {
+    const token = signToken({
+      id: user._id.toString(),
+      email: user.email,
+    });
+    reply.status(200).send({ message: 'Login successfully.', token });
+  } else {
+    throw new BadRequestError('Invalid credentials');
+  }
 }
 
 export function adminLogin(

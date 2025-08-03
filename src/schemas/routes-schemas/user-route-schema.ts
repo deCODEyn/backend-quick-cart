@@ -6,7 +6,7 @@ export type RegisterBodyType = z.infer<typeof registerBodySchema>;
 
 const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d\W]).*$/;
 
-export const registerBodySchema = userSchema.omit({ _id: true }).extend({
+export const registerBodySchema = userSchema.extend({
   password: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters long.' })

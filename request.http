@@ -13,7 +13,7 @@ Content-Type: application/json
 
 {
   "email": "email@teste.com",
-  "password": "senhaTeste"
+  "password": "senhaTeste9"
 }
 
 ###
@@ -23,7 +23,7 @@ Content-Type: application/json
 
 {
   "email": "email@teste.com",
-  "password": "senhaTeste"
+  "password": "senhaTeste9"
 }
 
 ###
@@ -34,6 +34,6 @@ Content-Type: application/json
 {
   "name": "Teste",
   "email": "email@teste.com",
-  "password": "senhaTeste"
+  "password": "senhaTeste9"
 }
 

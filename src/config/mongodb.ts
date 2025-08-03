@@ -1,16 +1,16 @@
-/** biome-ignore-all lint/suspicious/noConsole: Log from connection on Database */
-
+import type { FastifyInstance } from 'fastify';
 import mongoose from 'mongoose';
 import { env } from '../env.ts';
 
-export async function connectDB() {
+export async function connectDB(app: FastifyInstance) {
   try {
     mongoose.connection.on('connected', () => {
-      console.log('DB Connected');
+      app.log.info('DB Connected');
     });
+
     await mongoose.connect(`${env.MONGODB_URI}/quickcart`);
   } catch (error) {
-    console.log('DB connect error:', error);
+    app.log.error(error, 'DB connect error');
     process.exit(1);
   }
 }
