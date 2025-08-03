@@ -6,7 +6,7 @@ export interface UserDocumentInterface extends UserType, Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
   _id: Types.ObjectId;
 }
-export interface UserModelInterface extends Model<UserDocumentInterface> { }
+export interface UserModelInterface extends Model<UserDocumentInterface> {}
 
 const userDBSchema = new mongoose.Schema<
   UserDocumentInterface,

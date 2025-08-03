@@ -3,7 +3,6 @@ import z from 'zod';
 export const VALID_SIZES_ENUM = ['S', 'M', 'L', 'XL', 'XXL'] as const;
 
 export const productSchema = z.object({
-  _id: z.string().optional(),
   bestseller: z.boolean(),
   category: z.string().min(1, 'Category is required.'),
   date: z.number().int().positive('Date must be a positive numeric value.'),
