@@ -4,6 +4,7 @@ import type {
   LoginBodyType,
   RegisterBodyType,
 } from '../schemas/routes-schemas/user-route-schema.ts';
+import { ConflictError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
 
 export async function registerUser(
@@ -12,34 +13,28 @@ export async function registerUser(
 ) {
   const { name, email, password } = request.body;
 
-  try {
-    const userExists = await userModel.findOne({ email });
-    if (userExists) {
-      return reply.status(409).send({ message: 'User email already exists.' });
-    }
-
-    const newUser = new userModel({ name, email, password });
-    await newUser.save();
-
-    const token = signToken({
-      id: newUser._id.toString(),
-      email: newUser.email,
-    });
-
-    return reply.status(201).send({
-      message: 'User registered successfully.',
-      token,
-      user: {
-        id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-      },
-    });
-  } catch (error) {
-    // biome-ignore lint/suspicious/noConsole: development testing
-    console.error('Failed to create new user:', error);
-    return reply.status(500).send({ message: 'An internal server error.' });
+  const userExists = await userModel.findOne({ email });
+  if (userExists) {
+    throw new ConflictError('User email already exists.');
   }
+
+  const newUser = new userModel({ name, email, password });
+  await newUser.save();
+
+  const token = signToken({
+    id: newUser._id.toString(),
+    email: newUser.email,
+  });
+
+  return reply.status(201).send({
+    message: 'User registered successfully.',
+    token,
+    user: {
+      id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+    },
+  });
 }
 
 export function loginUser(
