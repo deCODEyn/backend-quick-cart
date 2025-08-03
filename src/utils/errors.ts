@@ -39,14 +39,30 @@ export const errorHandler = (
   _request: FastifyRequest,
   reply: FastifyReply
 ) => {
+  if (error.validation) {
+    const errors = error.validation.map((validationError) => {
+      return {
+        field: validationError.instancePath.substring(1),
+        message: validationError.message,
+      };
+    });
+
+    reply.status(400).send({
+      message: 'Data validation failure.',
+      errors,
+    });
+    return;
+  }
+
   if (error instanceof AppError) {
     reply.status(error.statusCode).send({
       message: error.message,
     });
-  } else {
-    reply.log.error(error);
-    reply.status(500).send({
-      message: 'Ocorreu um erro interno no servidor.',
-    });
+    return;
   }
+
+  reply.log.error(error);
+  reply.status(500).send({
+    message: 'Ocorreu um erro interno no servidor.',
+  });
 };
