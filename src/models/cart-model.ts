@@ -18,4 +18,4 @@ const CartDBSchema = new mongoose.Schema<CartType>(
 );
 
 export const CartModel = (mongoose.models.Cart ||
-  mongoose.model<CartType>('cart', CartDBSchema)) as mongoose.Model<CartType>;
+  mongoose.model<CartType>('Cart', CartDBSchema)) as mongoose.Model<CartType>;

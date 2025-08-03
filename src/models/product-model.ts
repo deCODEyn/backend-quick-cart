@@ -19,8 +19,8 @@ const productDBSchema = new mongoose.Schema<ProductType>(
   { timestamps: true }
 );
 
-export const ProductModel = (mongoose.models.product ||
+export const ProductModel = (mongoose.models.Product ||
   mongoose.model<ProductType>(
-    'product',
+    'Product',
     productDBSchema
   )) as mongoose.Model<ProductType>;

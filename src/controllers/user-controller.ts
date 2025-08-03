@@ -3,7 +3,11 @@ import type {
   LoginBodyType,
   RegisterBodyType,
 } from '../schemas/routes-schemas/user-route-schema.ts';
-import { createUser, findUserByEmail } from '../services/user-service.ts';
+import {
+  authenticateUser,
+  createUser,
+  findUserByEmail,
+} from '../services/user-service.ts';
 import { BadRequestError, ConflictError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
 
@@ -19,7 +23,6 @@ export async function registerUser(
   }
 
   const newUser = await createUser({ name, email, password });
-
   const token = signToken({
     id: newUser._id.toString(),
     email: newUser.email,
@@ -42,21 +45,12 @@ export async function loginUser(
 ) {
   const { email, password } = request.body;
 
-  const user = await findUserByEmail(email);
-  if (!user) {
-    throw new BadRequestError("User doesn't exists.");
+  const token = await authenticateUser(email, password);
+  if (!token) {
+    throw new BadRequestError('Invalid credentials.');
   }
 
-  const isMatch = await user.comparePassword(password);
-  if (isMatch) {
-    const token = signToken({
-      id: user._id.toString(),
-      email: user.email,
-    });
-    reply.status(200).send({ message: 'Login successfully.', token });
-  } else {
-    throw new BadRequestError('Invalid credentials');
-  }
+  return reply.status(200).send({ message: 'Login successfully.', token });
 }
 
 export function adminLogin(

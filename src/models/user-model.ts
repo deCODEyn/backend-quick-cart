@@ -3,20 +3,19 @@ import mongoose, { type Document, type Model, type Types } from 'mongoose';
 import type { UserType } from '../schemas/user-schema.ts';
 
 export interface UserDocumentInterface extends UserType, Document {
-  _id: Types.ObjectId;
   comparePassword(candidatePassword: string): Promise<boolean>;
+  _id: Types.ObjectId;
 }
-
-export interface UserModelInterface extends Model<UserDocumentInterface> {}
+export interface UserModelInterface extends Model<UserDocumentInterface> { }
 
 const userDBSchema = new mongoose.Schema<
   UserDocumentInterface,
   UserModelInterface
 >(
   {
-    name: { type: String, require: true },
-    email: { type: String, require: true, unique: true },
-    password: { type: String, require: true },
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true, select: false },
   },
   { timestamps: true }
 );
@@ -43,8 +42,8 @@ userDBSchema.methods.comparePassword = async function (
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-export const userModel = ((mongoose.models.user as UserModelInterface) ||
+export const userModel = ((mongoose.models.User as UserModelInterface) ||
   mongoose.model<UserDocumentInterface, UserModelInterface>(
-    'user',
+    'User',
     userDBSchema
   )) as mongoose.Model<UserDocumentInterface, UserModelInterface>;
