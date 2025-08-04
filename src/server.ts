@@ -8,7 +8,6 @@ import {
 } from 'fastify-type-provider-zod';
 import { connectCloudinary } from './config/cloudinary.ts';
 import { connectDB } from './config/mongodb.ts';
-import { MAX_FILE_SIZE, MAX_PRODUCT_IMAGES } from './config/upload.ts';
 import { env } from './env.ts';
 import { productRoute } from './routes/product-route.ts';
 import { userRoute } from './routes/user-route.ts';
@@ -25,12 +24,7 @@ app.register(fastifyCors, {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
 });
 
-app.register(fastifyMultipart, {
-  limits: {
-    fileSize: MAX_FILE_SIZE,
-    files: MAX_PRODUCT_IMAGES,
-  },
-});
+app.register(fastifyMultipart);
 
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);

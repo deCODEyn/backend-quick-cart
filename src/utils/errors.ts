@@ -1,4 +1,5 @@
 import type { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
+import { ZodError } from 'zod';
 
 export class AppError extends Error {
   message: string;
@@ -39,6 +40,18 @@ export const errorHandler = (
   _request: FastifyRequest,
   reply: FastifyReply
 ) => {
+  if (error instanceof ZodError) {
+    const errorMessages = error.issues.map((issue) => ({
+      path: issue.path.join('.'),
+      message: issue.message,
+    }));
+
+    return reply.status(400).send({
+      message: 'Validation failed.',
+      errors: errorMessages,
+    });
+  }
+
   if (error.validation) {
     const errors = error.validation.map((validationError) => {
       return {
@@ -63,6 +76,6 @@ export const errorHandler = (
 
   reply.log.error(error);
   reply.status(500).send({
-    message: 'Ocorreu um erro interno no servidor.',
+    message: 'Internal server error.',
   });
 };

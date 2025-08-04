@@ -5,7 +5,6 @@ export const VALID_SIZES_ENUM = ['S', 'M', 'L', 'XL', 'XXL'] as const;
 export const productSchema = z.object({
   bestseller: z.boolean(),
   category: z.string().min(1, 'Category is required.'),
-  date: z.number().int().positive('Date must be a positive numeric value.'),
   description: z
     .string()
     .min(10, 'The description must be at least 10 characters long.'),
@@ -17,7 +16,7 @@ export const productSchema = z.object({
   sizes: z
     .array(z.enum(VALID_SIZES_ENUM))
     .min(1, 'The product must be at least one size.'),
-  subCategory: z.string().min(1, 'A subcategoria é obrigatória.'),
+  subCategory: z.string().min(1, 'Subcategory is required.'),
 });
 
 export type ProductType = z.infer<typeof productSchema>;

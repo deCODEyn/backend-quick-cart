@@ -14,7 +14,6 @@ const productDBSchema = new mongoose.Schema<ProductType>(
     sizes: { type: [String], required: true, enum: VALID_SIZES_ENUM },
     subCategory: { type: String, required: true },
     bestseller: { type: Boolean, default: false },
-    date: { type: Number, required: true },
   },
   { timestamps: true }
 );

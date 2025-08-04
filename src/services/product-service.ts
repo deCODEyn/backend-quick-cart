@@ -1,28 +1,19 @@
-import type { MultipartFile } from '@fastify/multipart';
+/** biome-ignore-all lint/suspicious/noConsole: <dev> */
+/** biome-ignore-all lint/correctness/noUnusedImports: <dev> */
+/** biome-ignore-all lint/correctness/noUnusedFunctionParameters: <dev> */
 import { v2 as cloudinary } from 'cloudinary';
-import { MAX_PRODUCT_IMAGES } from '../config/upload.ts';
 import { ProductModel } from '../models/product-model.ts';
 import type { ProductType } from '../schemas/product-schema.ts';
 import type { CreateProductBodyType } from '../schemas/routes-schemas/product-route-schema.ts';
-import { BadRequestError } from '../utils/errors.ts';
+import type { ProcessedFile } from '../types/global-types.ts';
 
 export async function createProductService(
   productData: CreateProductBodyType,
-  images: MultipartFile[]
+  images: ProcessedFile[]
 ) {
-  if (images.length === 0) {
-    throw new BadRequestError('At least one image is required.');
-  }
-
-  if (images.length > MAX_PRODUCT_IMAGES) {
-    throw new BadRequestError(
-      `You can upload a maximum of ${MAX_PRODUCT_IMAGES} images.`
-    );
-  }
-
   const imageUrls = await Promise.all(
     images.map(async (image) => {
-      const buffer = await image.toBuffer();
+      const buffer = image.buffer;
       const base64 = buffer.toString('base64');
       const dataUri = `data:${image.mimetype};base64,${base64}`;
 
@@ -34,8 +25,11 @@ export async function createProductService(
     })
   );
 
+
   const productToSave: ProductType = { ...productData, image: imageUrls };
-  const newProduct = await ProductModel.create(productToSave);
+
+  const newProduct = new ProductModel(productToSave);
+  await newProduct.save();
 
   return newProduct;
 }

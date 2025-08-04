@@ -1,26 +1,14 @@
-import type { MultipartFile } from '@fastify/multipart';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { MAX_PRODUCT_IMAGES } from '../config/upload.ts';
 import type {
-  CreateProductRequest,
   GetProductParamsType,
   UpdateProductBodyType,
 } from '../schemas/routes-schemas/product-route-schema.ts';
 import { createProductService } from '../services/product-service.ts';
+import type { FastifyRequestBody } from '../types/global-types.ts';
 
-export async function createProduct(
-  request: FastifyRequest<CreateProductRequest>,
-  reply: FastifyReply
-) {
-  const productData = request.body;
-
-  const images: MultipartFile[] = [];
-  for (let i = 1; i <= MAX_PRODUCT_IMAGES; i++) {
-    const file = productData[`images${i}`] as MultipartFile | undefined;
-    if (file) {
-      images.push(file);
-    }
-  }
+export async function createProduct(request: FastifyRequest, reply: FastifyReply) {
+  const customRequest = request as FastifyRequestBody;
+  const { productData, images } = customRequest;
 
   const result = await createProductService(productData, images);
 

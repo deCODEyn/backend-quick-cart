@@ -1,4 +1,3 @@
-import type { MultipartFile } from '@fastify/multipart';
 import z from 'zod';
 import { productSchema } from '../product-schema.ts';
 
@@ -6,17 +5,6 @@ export const createProductBodySchema = productSchema.omit({
   image: true,
 });
 export type CreateProductBodyType = z.infer<typeof createProductBodySchema>;
-export type CreateProductRequest = {
-  Body: CreateProductBodyType & {
-    [key: string]:
-      | string
-      | number
-      | boolean
-      | string[]
-      | MultipartFile
-      | undefined;
-  };
-};
 
 export const updateProductBodySchema = productSchema.partial();
 export type UpdateProductBodyType = z.infer<typeof updateProductBodySchema>;
