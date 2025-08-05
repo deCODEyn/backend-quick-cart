@@ -67,5 +67,7 @@ export async function deleteProduct(
 
   await deleteProductService(id);
 
-  return reply.status(200).send({ message: 'Product and associated images deleted successfully.' });
+  return reply
+    .status(200)
+    .send({ message: 'Product and associated images deleted successfully.' });
 }

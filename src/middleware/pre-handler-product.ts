@@ -84,7 +84,7 @@ function convertAndValidateFields(rawBody: Record<string, string | string[]>) {
   return createProductBodySchema.parse(bodyToValidate);
 }
 
-export async function preValidateAndParseProduct(
+export async function preHandlerProduct(
   request: FastifyRequest,
   _reply: FastifyReply
 ) {

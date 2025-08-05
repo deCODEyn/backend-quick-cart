@@ -26,13 +26,13 @@ export async function registerUser(
   const token = signToken({
     id: newUser.id,
     email: newUser.email,
+    role: newUser.role,
   });
 
   return reply.status(201).send({
     message: 'User registered successfully.',
     token,
     user: {
-      id: newUser.id,
       name: newUser.name,
       email: newUser.email,
     },
@@ -51,13 +51,4 @@ export async function loginUser(
   }
 
   return reply.status(200).send({ message: 'Login successfully.', token });
-}
-
-export function adminLogin(
-  request: FastifyRequest<{ Body: LoginBodyType }>,
-  _reply: FastifyReply
-) {
-  const { email, password } = request.body;
-
-  return { msg: 'Admin login API Working', email, password };
 }

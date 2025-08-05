@@ -14,9 +14,7 @@ import { userRoute } from './routes/user-route.ts';
 import { errorHandler } from './utils/errors.ts';
 
 const app = fastify({
-  logger: {
-    level: 'info',
-  },
+  logger: { level: 'info' },
   disableRequestLogging: true,
 }).withTypeProvider<ZodTypeProvider>();
 

@@ -23,9 +23,9 @@ export class BadRequestError extends AppError {
   }
 }
 
-export class ConflictError extends AppError {
-  constructor(message = 'Data conflict.') {
-    super(message, 409);
+export class UnauthorizedError extends AppError {
+  constructor(message = 'Unauthorized request.') {
+    super(message, 401);
   }
 }
 
@@ -35,15 +35,27 @@ export class NotFoundError extends AppError {
   }
 }
 
-export class CloudinaryError extends AppError {
-  constructor(message = 'Cloudinary service failed') {
-    super(message, 500);
+export class ConflictError extends AppError {
+  constructor(message = 'Data conflict.') {
+    super(message, 409);
   }
 }
 
 export class DataIntegrityError extends AppError {
   constructor(message = 'Data integrity error') {
+    super(message, 422);
+  }
+}
+
+export class TokenPayloadError extends AppError {
+  constructor(message = 'Invalid token payload.') {
     super(message, 500);
+  }
+}
+
+export class CloudinaryError extends AppError {
+  constructor(message = 'Cloudinary service failed') {
+    super(message, 502);
   }
 }
 

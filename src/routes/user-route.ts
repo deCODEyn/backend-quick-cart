@@ -1,9 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import {
-  adminLogin,
-  loginUser,
-  registerUser,
-} from '../controllers/user-controller.ts';
+import { loginUser, registerUser } from '../controllers/user-controller.ts';
 import {
   loginBodySchema,
   registerBodySchema,
@@ -28,15 +24,5 @@ export function userRoute(app: FastifyInstance) {
       },
     },
     loginUser
-  );
-
-  app.post(
-    '/api/user/admin',
-    {
-      schema: {
-        body: loginBodySchema,
-      },
-    },
-    adminLogin
   );
 }

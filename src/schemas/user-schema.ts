@@ -11,6 +11,6 @@ export const userSchema = z.object({
 });
 export type UserType = z.infer<typeof userSchema>;
 
-export type UserPublicType = Omit<UserType, 'password' | 'role'> & {
+export type UserPublicType = Omit<UserType, 'password'> & {
   id: string;
 };

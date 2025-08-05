@@ -1,16 +1,20 @@
 import jwt from 'jsonwebtoken';
 import z from 'zod';
+import { JWT_EXPIRES_IN, USER_ROLE_ENUM } from '../config/constants.ts';
 import { env } from '../env.ts';
 
 export const jwtPayloadSchema = z.object({
   id: z.string().min(1),
   email: z.email(),
+  role: z.enum(USER_ROLE_ENUM),
+  iat: z.number().optional(),
+  exp: z.number().optional(),
 });
 
 export type JWTPayload = z.infer<typeof jwtPayloadSchema>;
 
 export function signToken(payload: JWTPayload): string {
-  return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '2h' });
+  return jwt.sign(payload, env.JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 }
 
 export function verifyAndValidateToken(token: string): JWTPayload | null {

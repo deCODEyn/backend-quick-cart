@@ -6,7 +6,7 @@ import {
   listProducts,
   updateProduct,
 } from '../controllers/product-controller.ts';
-import { preValidateAndParseProduct } from '../hooks/pre-handler-product.ts';
+import { preHandlerProduct } from '../middleware/pre-handler-product.ts';
 import {
   getProductParamsSchema,
   updateProductBodySchema,
@@ -16,7 +16,7 @@ export function productRoute(app: FastifyInstance) {
   app.post(
     '/api/products',
     {
-      preHandler: preValidateAndParseProduct,
+      preHandler: preHandlerProduct,
     },
     createProduct
   );

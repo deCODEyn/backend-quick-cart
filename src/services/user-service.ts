@@ -11,9 +11,9 @@ export async function createUser(userData: UserType): Promise<UserPublicType> {
   const newUser = new userModel(userData);
   await newUser.save();
 
-  const { _id, email, name } = newUser.toObject();
+  const { _id, email, name, role } = newUser.toObject();
 
-  return { id: _id.toString(), name, email };
+  return { id: _id.toString(), name, email, role };
 }
 
 export async function authenticateUser(
@@ -33,6 +33,7 @@ export async function authenticateUser(
   const token = signToken({
     id: user._id.toString(),
     email: user.email,
+    role: user.role,
   });
 
   return token;
