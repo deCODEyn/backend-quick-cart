@@ -35,6 +35,18 @@ export class NotFoundError extends AppError {
   }
 }
 
+export class CloudinaryError extends AppError {
+  constructor(message = 'Cloudinary service failed') {
+    super(message, 500);
+  }
+}
+
+export class DataIntegrityError extends AppError {
+  constructor(message = 'Data integrity error') {
+    super(message, 500);
+  }
+}
+
 export const errorHandler = (
   error: FastifyError,
   _request: FastifyRequest,
