@@ -1,9 +1,8 @@
 import type { FastifyRequest } from 'fastify';
-import type z from 'zod';
-import type { createProductBodySchema } from '../schemas/routes-schemas/product-route-schema.ts';
+import type { CreateProductBodyType } from '../schemas/routes-schemas/product-route-schema.ts';
 
 export interface FastifyRequestBody extends FastifyRequest {
-  productData: z.infer<typeof createProductBodySchema>;
+  productData: CreateProductBodyType;
   images: ProcessedFile[];
 }
 

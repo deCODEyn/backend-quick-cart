@@ -12,7 +12,6 @@ import {
   updateProductBodySchema,
 } from '../schemas/routes-schemas/product-route-schema.ts';
 
-
 export function productRoute(app: FastifyInstance) {
   app.post(
     '/api/products',
@@ -31,7 +30,7 @@ export function productRoute(app: FastifyInstance) {
     },
     getProduct
   );
-  app.put(
+  app.patch(
     '/api/products/:id',
     {
       schema: {

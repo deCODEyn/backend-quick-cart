@@ -9,7 +9,11 @@ import type {
   FastifyRequestBody,
   ProcessedFile,
 } from '../types/global-types.ts';
-import { validateImageCount, validateImageMinimumCount, validateImageSize } from '../utils/upload-validator.ts';
+import {
+  validateImageCount,
+  validateImageMinimumCount,
+  validateImageSize,
+} from '../utils/upload-validator.ts';
 
 async function handleFilePart(part: MultipartFile): Promise<ProcessedFile> {
   const buffer = await validateImageSize(part);

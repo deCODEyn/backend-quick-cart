@@ -8,6 +8,7 @@ import {
   deleteProductService,
   getProductService,
   listProductsService,
+  updateProductService,
 } from '../services/product-service.ts';
 import type { FastifyRequestBody } from '../types/global-types.ts';
 
@@ -39,14 +40,17 @@ export async function getProduct(
   return reply.status(200).send({ products: await getProductService(id) });
 }
 
-export function updateProduct(
-  _request: FastifyRequest<{
+export async function updateProduct(
+  request: FastifyRequest<{
     Body: UpdateProductBodyType;
     Params: GetProductParamsType;
   }>,
-  _reply: FastifyReply
+  reply: FastifyReply
 ) {
-  //update product
+  const { id } = request.params;
+  const updateData = request.body;
+
+  return reply.status(200).send(await updateProductService(id, updateData));
 }
 
 export async function deleteProduct(
