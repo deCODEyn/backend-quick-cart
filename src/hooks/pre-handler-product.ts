@@ -10,7 +10,7 @@ import type {
   ProcessedFile,
 } from '../types/global-types.ts';
 import {
-  validateImageCount,
+  validateImageMaximumCount,
   validateImageMinimumCount,
   validateImageSize,
 } from '../utils/upload-validator.ts';
@@ -52,7 +52,7 @@ async function parseMultipartFieldsAndFiles(request: FastifyRequestBody) {
 
   for await (const part of request.parts() as AsyncIterableIterator<Multipart>) {
     if (part.type === 'file') {
-      validateImageCount(imagePromises.length);
+      validateImageMaximumCount(imagePromises.length);
       imagePromises.push(handleFilePart(part));
     } else if (part.type === 'field') {
       handleFieldPart(part, rawBody);

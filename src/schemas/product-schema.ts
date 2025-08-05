@@ -1,6 +1,5 @@
 import z from 'zod';
-
-export const VALID_SIZES_ENUM = ['S', 'M', 'L', 'XL', 'XXL'] as const;
+import { VALID_SIZES_ENUM } from '../config/constants.ts';
 
 export const productSchema = z.object({
   bestseller: z.boolean(),
@@ -18,5 +17,4 @@ export const productSchema = z.object({
     .min(1, 'The product must be at least one size.'),
   subCategory: z.string().min(1, 'Subcategory is required.'),
 });
-
 export type ProductType = z.infer<typeof productSchema>;

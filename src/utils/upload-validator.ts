@@ -1,8 +1,8 @@
 import type { MultipartFile } from '@fastify/multipart';
-import { MAX_FILE_SIZE, MAX_PRODUCT_IMAGES } from '../config/upload.ts';
+import { MAX_FILE_SIZE, MAX_PRODUCT_IMAGES } from '../config/constants.ts';
 import { BadRequestError } from './errors.ts';
 
-export function validateImageCount(imagesCount: number) {
+export function validateImageMaximumCount(imagesCount: number) {
   if (imagesCount >= MAX_PRODUCT_IMAGES) {
     throw new BadRequestError(
       `The ${MAX_PRODUCT_IMAGES} image limit has been exceeded.`

@@ -1,8 +1,5 @@
-import mongoose from 'mongoose';
-import {
-  type ProductType,
-  VALID_SIZES_ENUM,
-} from '../schemas/product-schema.ts';
+import { VALID_SIZES_ENUM } from '../config/constants.ts';
+import type { ProductType } from '../schemas/product-schema.ts';
 
 const productDBSchema = new mongoose.Schema<ProductType>(
   {

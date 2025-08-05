@@ -15,16 +15,16 @@ export async function registerUser(
   request: FastifyRequest<{ Body: RegisterBodyType }>,
   reply: FastifyReply
 ) {
-  const { name, email, password } = request.body;
+  const userData = request.body;
 
-  const userExists = await findUserByEmail(email);
+  const userExists = await findUserByEmail(userData.email);
   if (userExists) {
     throw new ConflictError('User email already exists.');
   }
 
-  const newUser = await createUser({ name, email, password });
+  const newUser = await createUser(userData);
   const token = signToken({
-    id: newUser._id.toString(),
+    id: newUser.id,
     email: newUser.email,
   });
 
@@ -32,7 +32,7 @@ export async function registerUser(
     message: 'User registered successfully.',
     token,
     user: {
-      id: newUser._id,
+      id: newUser.id,
       name: newUser.name,
       email: newUser.email,
     },

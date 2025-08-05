@@ -13,5 +13,4 @@ export const cartSchema = z.object({
   userId: z.string().optional(),
   items: z.array(cartItemSchema),
 });
-
 export type CartType = z.infer<typeof cartSchema>;

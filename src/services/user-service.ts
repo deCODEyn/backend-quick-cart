@@ -1,5 +1,5 @@
-import { type UserDocumentInterface, userModel } from '../models/user-model.ts';
-import type { UserType } from '../schemas/user-schema.ts';
+import { userModel } from '../models/user-model.ts';
+import type { UserPublicType, UserType } from '../schemas/user-schema.ts';
 import { signToken } from '../utils/jwt.ts';
 
 export async function findUserByEmail(email: string) {
@@ -7,13 +7,13 @@ export async function findUserByEmail(email: string) {
   return user;
 }
 
-export async function createUser(
-  userData: UserType
-): Promise<UserDocumentInterface> {
+export async function createUser(userData: UserType): Promise<UserPublicType> {
   const newUser = new userModel(userData);
   await newUser.save();
 
-  return newUser;
+  const { _id, email, name } = newUser.toObject();
+
+  return { id: _id.toString(), name, email };
 }
 
 export async function authenticateUser(

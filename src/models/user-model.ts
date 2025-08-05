@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import mongoose, { type Document, type Model, type Types } from 'mongoose';
+import { USER_ROLE_ENUM } from '../config/constants.ts';
 import type { UserType } from '../schemas/user-schema.ts';
 
 export interface UserDocumentInterface extends UserType, Document {
@@ -16,6 +17,12 @@ const userDBSchema = new mongoose.Schema<
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
+    role: {
+      type: String,
+      enum: USER_ROLE_ENUM,
+      default: 'User',
+      required: true,
+    },
   },
   { timestamps: true }
 );
