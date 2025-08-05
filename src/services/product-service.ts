@@ -1,4 +1,7 @@
-import { ProductModel } from '../models/product-model.ts';
+import {
+  type ProductDocumentInterface,
+  ProductModel,
+} from '../models/product-model.ts';
 import type { ProductType } from '../schemas/product-schema.ts';
 import type {
   CreateProductBodyType,
@@ -15,42 +18,43 @@ import { findProductOrThrow } from './product-helpers.ts';
 export async function createProductService(
   productData: CreateProductBodyType,
   images: ProcessedFile[]
-) {
+): Promise<ProductDocumentInterface> {
   const imageUrls = await uploadImagesToCloudinary(images);
   const productToSave: ProductType = { ...productData, image: imageUrls };
 
   const newProduct = new ProductModel(productToSave);
   await newProduct.save();
 
-  return {
-    message: 'Product created and images uploaded successfully.',
-    newProduct,
-  };
+  return newProduct;
 }
 
-export async function listProductsService() {
+export async function listProductsService(): Promise<
+  ProductDocumentInterface[]
+> {
   return await ProductModel.find({});
 }
 
-export async function deleteProductService(id: string) {
+export async function deleteProductService(id: string): Promise<void> {
   const product = await findProductOrThrow(id);
-
   if (product.image) {
     await deleteImagesFromCloudinary(product.image);
   }
 
   await ProductModel.findByIdAndDelete(id);
-  return { message: 'Product and associated images deleted successfully.' };
+
+  return;
 }
 
-export async function getProductService(id: string) {
+export async function getProductService(
+  id: string
+): Promise<ProductDocumentInterface> {
   return await findProductOrThrow(id);
 }
 
 export async function updateProductService(
   id: string,
   updateData: UpdateProductBodyType
-) {
+): Promise<ProductDocumentInterface> {
   const updatedProduct = await ProductModel.findByIdAndUpdate(id, updateData, {
     new: true,
     runValidators: true,
@@ -59,8 +63,5 @@ export async function updateProductService(
     throw new NotFoundError('Product not found after update.');
   }
 
-  return {
-    message: 'Product updated successfully.',
-    updatedProduct,
-  };
+  return updatedProduct;
 }

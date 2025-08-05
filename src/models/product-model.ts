@@ -1,7 +1,17 @@
+import mongoose, { type Document, type Model, type Types } from 'mongoose';
 import { VALID_SIZES_ENUM } from '../config/constants.ts';
 import type { ProductType } from '../schemas/product-schema.ts';
 
-const productDBSchema = new mongoose.Schema<ProductType>(
+export interface ProductDocumentInterface extends ProductType, Document {
+  _id: Types.ObjectId;
+}
+export interface ProductModelInterface
+  extends Model<ProductDocumentInterface> {}
+
+const productDBSchema = new mongoose.Schema<
+  ProductDocumentInterface,
+  ProductModelInterface
+>(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
@@ -15,8 +25,9 @@ const productDBSchema = new mongoose.Schema<ProductType>(
   { timestamps: true }
 );
 
-export const ProductModel = (mongoose.models.Product ||
-  mongoose.model<ProductType>(
+export const ProductModel = ((mongoose.models
+  .Product as ProductModelInterface) ||
+  mongoose.model<ProductDocumentInterface, ProductModelInterface>(
     'Product',
     productDBSchema
-  )) as mongoose.Model<ProductType>;
+  )) as mongoose.Model<ProductDocumentInterface, ProductModelInterface>;

@@ -21,7 +21,10 @@ export async function createProduct(
 
   const result = await createProductService(productData, images);
 
-  return reply.status(201).send(result);
+  return reply.status(201).send({
+    message: 'Product created and images uploaded successfully.',
+    result,
+  });
 }
 
 export async function listProducts(
@@ -50,7 +53,10 @@ export async function updateProduct(
   const { id } = request.params;
   const updateData = request.body;
 
-  return reply.status(200).send(await updateProductService(id, updateData));
+  return reply.status(200).send({
+    message: 'Product updated successfully.',
+    updatedProduct: await updateProductService(id, updateData),
+  });
 }
 
 export async function deleteProduct(
@@ -59,5 +65,7 @@ export async function deleteProduct(
 ) {
   const { id } = request.params;
 
-  return reply.status(200).send(await deleteProductService(id));
+  await deleteProductService(id);
+
+  return reply.status(200).send({ message: 'Product and associated images deleted successfully.' });
 }
