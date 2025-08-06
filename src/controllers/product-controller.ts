@@ -34,24 +34,18 @@ export async function listProducts(
   return reply.status(200).send({ products: await listProductsService() });
 }
 
-export async function getProduct(
-  request: FastifyRequest<{ Params: GetProductParamsType }>,
-  reply: FastifyReply
-) {
-  const { id } = request.params;
+export async function getProduct(request: FastifyRequest, reply: FastifyReply) {
+  const { id } = request.params as GetProductParamsType;
 
   return reply.status(200).send({ products: await getProductService(id) });
 }
 
 export async function updateProduct(
-  request: FastifyRequest<{
-    Body: UpdateProductBodyType;
-    Params: GetProductParamsType;
-  }>,
+  request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.params;
-  const updateData = request.body;
+  const { id } = request.params as GetProductParamsType;
+  const updateData = request.body as UpdateProductBodyType;
 
   return reply.status(200).send({
     message: 'Product updated successfully.',
@@ -60,10 +54,10 @@ export async function updateProduct(
 }
 
 export async function deleteProduct(
-  request: FastifyRequest<{ Params: GetProductParamsType }>,
+  request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.params;
+  const { id } = request.params as GetProductParamsType;
 
   await deleteProductService(id);
 

@@ -62,6 +62,5 @@ export async function updateProductService(
   if (!updatedProduct) {
     throw new NotFoundError('Product not found after update.');
   }
-
   return updatedProduct;
 }

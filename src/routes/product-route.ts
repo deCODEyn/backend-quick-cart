@@ -7,6 +7,9 @@ import {
   updateProduct,
 } from '../controllers/product-controller.ts';
 import { preHandlerProduct } from '../middleware/pre-handler-product.ts';
+import { renewToken } from '../middleware/renew-token.ts';
+import { validateAdminAuth } from '../middleware/validate-admin-auth.ts';
+import { validateAuth } from '../middleware/validate-auth.ts';
 import {
   getProductParamsSchema,
   updateProductBodySchema,
@@ -16,7 +19,8 @@ export function productRoute(app: FastifyInstance) {
   app.post(
     '/api/products',
     {
-      preHandler: preHandlerProduct,
+      preHandler: [validateAuth, validateAdminAuth, preHandlerProduct],
+      onSend: renewToken,
     },
     createProduct
   );
@@ -37,6 +41,8 @@ export function productRoute(app: FastifyInstance) {
         params: getProductParamsSchema,
         body: updateProductBodySchema,
       },
+      preHandler: [validateAuth, validateAdminAuth],
+      onSend: renewToken,
     },
     updateProduct
   );
@@ -46,6 +52,8 @@ export function productRoute(app: FastifyInstance) {
       schema: {
         params: getProductParamsSchema,
       },
+      preHandler: [validateAuth, validateAdminAuth],
+      onSend: renewToken,
     },
     deleteProduct
   );

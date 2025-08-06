@@ -87,7 +87,7 @@ function convertAndValidateFields(rawBody: Record<string, string | string[]>) {
 export async function preHandlerProduct(
   request: FastifyRequest,
   _reply: FastifyReply
-) {
+): Promise<void> {
   const customRequest = request as FastifyRequestBody;
   const { rawBody, images } = await parseMultipartFieldsAndFiles(customRequest);
   const validatedData = convertAndValidateFields(rawBody);
