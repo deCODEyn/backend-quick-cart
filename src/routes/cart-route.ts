@@ -1,7 +1,14 @@
 import type { FastifyInstance } from 'fastify';
-import { updateCartItem } from '../controllers/cart-controller.ts';
+import {
+  clearCart,
+  deleteCartItem,
+  updateCartItem,
+} from '../controllers/cart-controller.ts';
 import { validateAuth } from '../middleware/validate-auth.ts';
-import { postCartBodySchema } from '../schemas/routes-schemas/cart-route-schema.ts';
+import {
+  deleteCartItemParamsSchema,
+  postCartBodySchema,
+} from '../schemas/routes-schemas/cart-route-schema.ts';
 
 export function cartRoute(app: FastifyInstance) {
   app.post(
@@ -11,5 +18,20 @@ export function cartRoute(app: FastifyInstance) {
       preHandler: validateAuth,
     },
     updateCartItem
+  );
+  app.delete(
+    '/api/cart/:id/:size',
+    {
+      schema: { params: deleteCartItemParamsSchema },
+      preHandler: validateAuth,
+    },
+    deleteCartItem
+  );
+  app.delete(
+    '/api/cart',
+    {
+      preHandler: validateAuth,
+    },
+    clearCart
   );
 }

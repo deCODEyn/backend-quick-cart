@@ -3,6 +3,12 @@ import { type CartDocumentInterface, CartModel } from '../models/cart-model.ts';
 import type { PostCartBodyType } from '../schemas/routes-schemas/cart-route-schema.ts';
 import type { UpdateCartItemResult } from '../types/global-types.ts';
 
+export async function clearCartService(
+  userId: Types.ObjectId
+): Promise<CartDocumentInterface | null> {
+  return await CartModel.findOneAndDelete({ userId });
+}
+
 export async function removeCartItemService(
   userId: Types.ObjectId,
   itemId: string,
@@ -13,6 +19,10 @@ export async function removeCartItemService(
     { $pull: { items: { id: itemId, size } } },
     { new: true }
   );
+  if (updatedCart && updatedCart.items.length === 0) {
+    return await clearCartService(userId);
+  }
+
   return updatedCart;
 }
 

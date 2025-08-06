@@ -8,4 +8,9 @@ export const postCartBodySchema = cartItemBaseSchema.extend({
     .min(0, 'The quantity must be at least 0.'),
 });
 
+export const deleteCartItemParamsSchema = cartItemBaseSchema;
+
 export type PostCartBodyType = z.infer<typeof postCartBodySchema>;
+export type DeleteCartItemParamsType = z.infer<
+  typeof deleteCartItemParamsSchema
+>;
