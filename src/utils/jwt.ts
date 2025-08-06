@@ -4,7 +4,7 @@ import { JWT_EXPIRES_IN, USER_ROLE_ENUM } from '../config/constants.ts';
 import { env } from '../env.ts';
 
 export const jwtPayloadSchema = z.object({
-  id: z.string().min(1),
+  userId: z.string().min(1),
   email: z.email(),
   role: z.enum(USER_ROLE_ENUM),
   iat: z.number().optional(),

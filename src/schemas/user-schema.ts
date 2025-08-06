@@ -9,8 +9,8 @@ export const userSchema = z.object({
   password: z.string(),
   role: z.enum(USER_ROLE_ENUM).default('User'),
 });
-export type UserType = z.infer<typeof userSchema>;
 
+export type UserType = z.infer<typeof userSchema>;
 export type UserPublicType = Omit<UserType, 'password'> & {
   id: string;
 };

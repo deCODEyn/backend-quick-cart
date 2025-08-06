@@ -34,31 +34,35 @@ export async function listProductsService(): Promise<
   return await ProductModel.find({});
 }
 
-export async function deleteProductService(id: string): Promise<void> {
-  const product = await findProductOrThrow(id);
+export async function deleteProductService(productId: string): Promise<void> {
+  const product = await findProductOrThrow(productId);
   if (product.image) {
     await deleteImagesFromCloudinary(product.image);
   }
 
-  await ProductModel.findByIdAndDelete(id);
+  await ProductModel.findByIdAndDelete(productId);
 
   return;
 }
 
 export async function getProductService(
-  id: string
+  productId: string
 ): Promise<ProductDocumentInterface> {
-  return await findProductOrThrow(id);
+  return await findProductOrThrow(productId);
 }
 
 export async function updateProductService(
-  id: string,
+  productId: string,
   updateData: UpdateProductBodyType
 ): Promise<ProductDocumentInterface> {
-  const updatedProduct = await ProductModel.findByIdAndUpdate(id, updateData, {
-    new: true,
-    runValidators: true,
-  });
+  const updatedProduct = await ProductModel.findByIdAndUpdate(
+    productId,
+    updateData,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
   if (!updatedProduct) {
     throw new NotFoundError('Product not found after update.');
   }

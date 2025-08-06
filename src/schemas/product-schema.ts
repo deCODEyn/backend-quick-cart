@@ -17,4 +17,5 @@ export const productSchema = z.object({
     .min(1, 'The product must be at least one size.'),
   subCategory: z.string().min(1, 'Subcategory is required.'),
 });
+
 export type ProductType = z.infer<typeof productSchema>;

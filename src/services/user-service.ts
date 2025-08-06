@@ -31,7 +31,7 @@ export async function authenticateUser(
   }
 
   const token = signToken({
-    id: user._id.toString(),
+    userId: user._id.toString(),
     email: user.email,
     role: user.role,
   });

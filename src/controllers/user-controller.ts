@@ -24,14 +24,14 @@ export async function registerUser(
 
   const newUser = await createUser(userData);
   const token = signToken({
-    id: newUser.id,
+    userId: newUser.id,
     email: newUser.email,
     role: newUser.role,
   });
 
+  reply.header('x-access-token', token);
   return reply.status(201).send({
     message: 'User registered successfully.',
-    token,
     user: {
       name: newUser.name,
       email: newUser.email,
@@ -50,5 +50,6 @@ export async function loginUser(
     throw new BadRequestError('Invalid credentials.');
   }
 
-  return reply.status(200).send({ message: 'Login successfully.', token });
+  reply.header('x-access-token', token);
+  return reply.status(200).send({ message: 'Login successfully.' });
 }

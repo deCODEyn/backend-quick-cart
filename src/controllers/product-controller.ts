@@ -18,7 +18,6 @@ export async function createProduct(
 ) {
   const customRequest = request as FastifyRequestBody;
   const { productData, images } = customRequest;
-
   const result = await createProductService(productData, images);
 
   return reply.status(201).send({
@@ -35,21 +34,23 @@ export async function listProducts(
 }
 
 export async function getProduct(request: FastifyRequest, reply: FastifyReply) {
-  const { id } = request.params as GetProductParamsType;
+  const { id: productId } = request.params as GetProductParamsType;
 
-  return reply.status(200).send({ products: await getProductService(id) });
+  return reply
+    .status(200)
+    .send({ products: await getProductService(productId) });
 }
 
 export async function updateProduct(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.params as GetProductParamsType;
+  const { id: productId } = request.params as GetProductParamsType;
   const updateData = request.body as UpdateProductBodyType;
 
   return reply.status(200).send({
     message: 'Product updated successfully.',
-    updatedProduct: await updateProductService(id, updateData),
+    updatedProduct: await updateProductService(productId, updateData),
   });
 }
 
@@ -57,9 +58,8 @@ export async function deleteProduct(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.params as GetProductParamsType;
-
-  await deleteProductService(id);
+  const { id: productId } = request.params as GetProductParamsType;
+  await deleteProductService(productId);
 
   return reply
     .status(200)
