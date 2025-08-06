@@ -1,4 +1,5 @@
 import type { FastifyRequest } from 'fastify';
+import type { CartDocumentInterface } from '../models/cart-model.ts';
 import type { CreateProductBodyType } from '../schemas/routes-schemas/product-route-schema.ts';
 
 export interface FastifyRequestBody extends FastifyRequest {
@@ -13,4 +14,9 @@ export type ProcessedFile = {
   encoding: string;
   mimetype: string;
   buffer: Buffer;
+};
+
+export type UpdateCartItemResult = {
+  cart: CartDocumentInterface | null;
+  action: 'updated' | 'added' | 'removed';
 };

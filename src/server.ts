@@ -9,6 +9,7 @@ import {
 import { connectCloudinary } from './config/cloudinary.ts';
 import { connectDB } from './config/mongodb.ts';
 import { env } from './env.ts';
+import { cartRoute } from './routes/cart-route.ts';
 import { productRoute } from './routes/product-route.ts';
 import { userRoute } from './routes/user-route.ts';
 import { errorHandler } from './utils/errors.ts';
@@ -34,6 +35,7 @@ app.get('/api/health', () => {
 
 app.register(userRoute);
 app.register(productRoute);
+app.register(cartRoute);
 
 async function start() {
   try {
