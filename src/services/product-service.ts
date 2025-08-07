@@ -31,7 +31,7 @@ export async function createProductService(
 export async function listProductsService(): Promise<
   ProductDocumentInterface[]
 > {
-  return await ProductModel.find({});
+  return await ProductModel.find({}).exec();
 }
 
 export async function deleteProductService(productId: string): Promise<void> {
@@ -40,7 +40,7 @@ export async function deleteProductService(productId: string): Promise<void> {
     await deleteImagesFromCloudinary(product.image);
   }
 
-  await ProductModel.findByIdAndDelete(productId);
+  await ProductModel.findByIdAndDelete(productId).exec();
 
   return;
 }
@@ -62,7 +62,7 @@ export async function updateProductService(
       new: true,
       runValidators: true,
     }
-  );
+  ).exec();
   if (!updatedProduct) {
     throw new NotFoundError('Product not found after update.');
   }

@@ -6,7 +6,7 @@ import type { UpdateCartItemResult } from '../types/global-types.ts';
 export async function clearCartService(
   userId: Types.ObjectId
 ): Promise<CartDocumentInterface | null> {
-  return await CartModel.findOneAndDelete({ userId });
+  return await CartModel.findOneAndDelete({ userId }).exec();
 }
 
 export async function removeCartItemService(
@@ -18,11 +18,10 @@ export async function removeCartItemService(
     { userId },
     { $pull: { items: { id: itemId, size } } },
     { new: true }
-  );
+  ).exec();
   if (updatedCart && updatedCart.items.length === 0) {
     return await clearCartService(userId);
   }
-
   return updatedCart;
 }
 
@@ -42,7 +41,7 @@ export async function updateExistingCartItemService(
       $set: { 'items.$.quantity': quantity },
     },
     { new: true }
-  );
+  ).exec();
   return updatedCart;
 }
 
@@ -56,7 +55,7 @@ export async function addNewCartItemService(
     { userId },
     { $push: { items: { id: itemId, size, quantity } } },
     { new: true, upsert: true }
-  );
+  ).exec();
   return newCart;
 }
 

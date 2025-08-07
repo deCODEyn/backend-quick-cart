@@ -3,7 +3,7 @@ import type { UserPublicType, UserType } from '../schemas/user-schema.ts';
 import { signToken } from '../utils/jwt.ts';
 
 export async function findUserByEmail(email: string) {
-  const user = await userModel.findOne({ email });
+  const user = await userModel.findOne({ email }).exec();
   return user;
 }
 
@@ -20,7 +20,7 @@ export async function authenticateUser(
   email: string,
   passwordFromRequest: string
 ): Promise<string | null> {
-  const user = await userModel.findOne({ email }).select('+password');
+  const user = await userModel.findOne({ email }).select('+password').exec();
   if (!user) {
     return null;
   }
