@@ -36,6 +36,7 @@ export async function registerUser(
       name: newUser.name,
       email: newUser.email,
     },
+    success: true,
   });
 }
 
@@ -51,5 +52,7 @@ export async function loginUser(
   }
 
   reply.header('x-access-token', token);
-  return reply.status(200).send({ message: 'Login successfully.' });
+  return reply
+    .status(200)
+    .send({ message: 'Login successfully.', success: true });
 }

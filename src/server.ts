@@ -7,6 +7,7 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
 import { connectCloudinary } from './config/cloudinary.ts';
+import { MAX_FILE_SIZE } from './config/constants.ts';
 import { connectDB } from './config/mongodb.ts';
 import { env } from './env.ts';
 import { cartRoute } from './routes/cart-route.ts';
@@ -21,9 +22,16 @@ const app = fastify({
 
 app.register(fastifyCors, {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-access-token'],
+  exposedHeaders: ['x-access-token'],
 });
 
-app.register(fastifyMultipart);
+app.register(fastifyMultipart, {
+  limits: {
+    fileSize: MAX_FILE_SIZE,
+  },
+});
 
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);

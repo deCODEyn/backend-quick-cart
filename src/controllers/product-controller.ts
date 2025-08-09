@@ -23,6 +23,7 @@ export async function createProduct(
   return reply.status(201).send({
     message: 'Product created and images uploaded successfully.',
     result,
+    success: true,
   });
 }
 
@@ -30,7 +31,9 @@ export async function listProducts(
   _request: FastifyRequest,
   reply: FastifyReply
 ) {
-  return reply.status(200).send({ products: await listProductsService() });
+  return reply
+    .status(200)
+    .send({ success: true, products: await listProductsService() });
 }
 
 export async function getProduct(request: FastifyRequest, reply: FastifyReply) {
@@ -38,7 +41,7 @@ export async function getProduct(request: FastifyRequest, reply: FastifyReply) {
 
   return reply
     .status(200)
-    .send({ products: await getProductService(productId) });
+    .send({ success: true, products: await getProductService(productId) });
 }
 
 export async function updateProduct(
@@ -50,6 +53,7 @@ export async function updateProduct(
 
   return reply.status(200).send({
     message: 'Product updated successfully.',
+    success: true,
     updatedProduct: await updateProductService(productId, updateData),
   });
 }
@@ -61,7 +65,8 @@ export async function deleteProduct(
   const { id: productId } = request.params as GetProductParamsType;
   await deleteProductService(productId);
 
-  return reply
-    .status(200)
-    .send({ message: 'Product and associated images deleted successfully.' });
+  return reply.status(200).send({
+    message: 'Product and associated images deleted successfully.',
+    success: true,
+  });
 }

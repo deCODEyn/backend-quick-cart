@@ -41,7 +41,7 @@ export async function updateCartItem(
       message = 'Cart has been updated.';
   }
 
-  return reply.status(200).send({ message, cart });
+  return reply.status(200).send({ message, cart, success: true });
 }
 
 export async function deleteCartItem(
@@ -59,7 +59,7 @@ export async function deleteCartItem(
 
   return reply
     .status(200)
-    .send({ message: 'Item successfully removed from cart.' });
+    .send({ message: 'Item successfully removed from cart.', success: true });
 }
 
 export async function clearCart(request: FastifyRequest, reply: FastifyReply) {
@@ -71,5 +71,7 @@ export async function clearCart(request: FastifyRequest, reply: FastifyReply) {
   const userId = new mongoose.Types.ObjectId(payloadUserId);
   await clearCartService(userId);
 
-  return reply.status(200).send({ message: 'Your cart has been discarded.' });
+  return reply
+    .status(200)
+    .send({ message: 'Your cart has been discarded.', success: true });
 }
