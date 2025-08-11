@@ -1,5 +1,11 @@
 import type { FastifyInstance } from 'fastify';
-import { loginUser, registerUser } from '../controllers/user-controller.ts';
+import {
+  getMe,
+  loginUser,
+  logoutUser,
+  registerUser,
+} from '../controllers/user-controller.ts';
+import { validateAuth } from '../middleware/validate-auth.ts';
 import {
   loginBodySchema,
   registerBodySchema,
@@ -15,7 +21,6 @@ export function userRoute(app: FastifyInstance) {
     },
     registerUser
   );
-
   app.post(
     '/api/user/login',
     {
@@ -25,4 +30,6 @@ export function userRoute(app: FastifyInstance) {
     },
     loginUser
   );
+  app.get('/api/user/me', { preHandler: [validateAuth] }, getMe);
+  app.post('/api/user/logout', logoutUser);
 }

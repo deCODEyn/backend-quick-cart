@@ -6,7 +6,7 @@ export function setAuthCookie(reply: FastifyReply, token: string) {
     path: '/',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    maxAge: AUTH_TOKEN_EXPIRATION_SECONDS
+    maxAge: AUTH_TOKEN_EXPIRATION_SECONDS,
   });
 }
 

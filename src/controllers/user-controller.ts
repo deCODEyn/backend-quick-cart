@@ -8,7 +8,8 @@ import {
   createUser,
   findUserByEmail,
 } from '../services/user-service.ts';
-import { setAuthCookie } from '../utils/cookie.ts';
+import type { JWTPayload } from '../types/global-types.ts';
+import { clearAuthCookie, setAuthCookie } from '../utils/cookie.ts';
 import { BadRequestError, ConflictError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
 
@@ -60,4 +61,23 @@ export async function loginUser(
   return reply
     .status(200)
     .send({ message: 'Login successfully.', success: true });
+}
+
+export function getMe(request: FastifyRequest, reply: FastifyReply) {
+  const user = request.user as JWTPayload;
+
+  return reply.status(200).send({
+    message: 'User profile fetched successfully.',
+    result: { email: user.email, role: user.role },
+    success: true,
+  });
+}
+
+export function logoutUser(_request: FastifyRequest, reply: FastifyReply) {
+  clearAuthCookie(reply);
+
+  return reply.status(200).send({
+    message: 'Logout successful.',
+    success: true,
+  });
 }
