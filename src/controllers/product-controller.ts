@@ -33,7 +33,7 @@ export async function listProducts(
 ) {
   return reply
     .status(200)
-    .send({ success: true, products: await listProductsService() });
+    .send({ result: await listProductsService(), success: true });
 }
 
 export async function getProduct(request: FastifyRequest, reply: FastifyReply) {
@@ -41,7 +41,7 @@ export async function getProduct(request: FastifyRequest, reply: FastifyReply) {
 
   return reply
     .status(200)
-    .send({ success: true, products: await getProductService(productId) });
+    .send({ result: await getProductService(productId), success: true });
 }
 
 export async function updateProduct(
@@ -53,8 +53,8 @@ export async function updateProduct(
 
   return reply.status(200).send({
     message: 'Product updated successfully.',
+    result: await updateProductService(productId, updateData),
     success: true,
-    updatedProduct: await updateProductService(productId, updateData),
   });
 }
 

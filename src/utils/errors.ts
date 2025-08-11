@@ -66,7 +66,7 @@ export const errorHandler = (
 ) => {
   if (error instanceof ZodError) {
     const errorMessages = error.issues.map((issue) => ({
-      path: issue.path.join('.'),
+      field: issue.path.join('.'),
       message: issue.message,
     }));
 

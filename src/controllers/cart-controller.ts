@@ -41,7 +41,7 @@ export async function updateCartItem(
       message = 'Cart has been updated.';
   }
 
-  return reply.status(200).send({ message, cart, success: true });
+  return reply.status(200).send({ message, result: cart, success: true });
 }
 
 export async function deleteCartItem(

@@ -28,14 +28,15 @@ export async function registerUser(
     email: newUser.email,
     role: newUser.role,
   });
+  const user = {
+    name: newUser.name,
+    email: newUser.email,
+  }
 
   reply.header('x-access-token', token);
   return reply.status(201).send({
     message: 'User registered successfully.',
-    user: {
-      name: newUser.name,
-      email: newUser.email,
-    },
+    result: user,
     success: true,
   });
 }
