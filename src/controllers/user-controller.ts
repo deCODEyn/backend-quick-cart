@@ -8,6 +8,7 @@ import {
   createUser,
   findUserByEmail,
 } from '../services/user-service.ts';
+import { setAuthCookie } from '../utils/cookie.ts';
 import { BadRequestError, ConflictError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
 
@@ -28,12 +29,14 @@ export async function registerUser(
     email: newUser.email,
     role: newUser.role,
   });
+
+  setAuthCookie(reply, token);
+
   const user = {
     name: newUser.name,
     email: newUser.email,
-  }
+  };
 
-  reply.header('x-access-token', token);
   return reply.status(201).send({
     message: 'User registered successfully.',
     result: user,
@@ -52,7 +55,8 @@ export async function loginUser(
     throw new BadRequestError('Invalid credentials.');
   }
 
-  reply.header('x-access-token', token);
+  setAuthCookie(reply, token);
+
   return reply
     .status(200)
     .send({ message: 'Login successfully.', success: true });

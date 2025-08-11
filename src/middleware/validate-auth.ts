@@ -12,19 +12,17 @@ export function validateAuth(
   done: HookHandlerDoneFunction
 ): void {
   try {
-    const authHeader = request.headers.authorization;
-    if (!authHeader?.startsWith('Bearer ')) {
-      throw new UnauthorizedError('Token not provided or malformed.');
+    const token = request.cookies['auth-token'];
+    if (!token) {
+      throw new UnauthorizedError('Token not provided.');
     }
 
-    const token = authHeader.split(' ')[1];
     const payload = verifyAndValidateToken(token);
     if (!payload) {
       throw new UnauthorizedError('Invalid or expired token.');
     }
 
     request.user = payload;
-
     done();
   } catch (error) {
     done(error as Error);

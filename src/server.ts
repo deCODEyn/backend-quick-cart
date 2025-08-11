@@ -1,3 +1,4 @@
+import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
 import fastifyMultipart from '@fastify/multipart';
 import fastify from 'fastify';
@@ -20,31 +21,43 @@ const app = fastify({
   disableRequestLogging: true,
 }).withTypeProvider<ZodTypeProvider>();
 
+// -- 1. REGISTRO DE PLUGINS GLOBAIS --
+app.register(fastifyCookie);
+
 app.register(fastifyCors, {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-access-token'],
-  exposedHeaders: ['x-access-token'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 });
 
+// -- 2. REGISTRO DE PLUGINS ESPECÍFICOS --
 app.register(fastifyMultipart, {
   limits: {
     fileSize: MAX_FILE_SIZE,
   },
 });
 
+// -- 3. CONFIGURAÇÕES DE COMPILADORES --
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);
+
+// -- 4. CONFIGURAÇÕES DE ERROS --
 app.setErrorHandler(errorHandler);
 
+// -- 5. REGISTRO DE PLUGINS DE DOCUMENTAÇÃO --
+
+// -- 6. HEALTH CHECK --
 app.get('/api/health', () => {
   return 'Health check API: response OK';
 });
 
+// -- 7. REGISTRO DAS ROTAS DA APLICAÇÃO --
 app.register(userRoute);
 app.register(productRoute);
 app.register(cartRoute);
 
+// -- 8. APP START --
 async function start() {
   try {
     await connectDB(app);
