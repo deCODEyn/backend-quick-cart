@@ -16,8 +16,7 @@ export async function createProduct(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const customRequest = request as FastifyRequestBody;
-  const { productData, images } = customRequest;
+  const { productData, images } = request as FastifyRequestBody;
   const result = await createProductService(productData, images);
 
   return reply.status(201).send({

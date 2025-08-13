@@ -4,9 +4,10 @@ import type {
   HookHandlerDoneFunction,
 } from 'fastify';
 import { RENEW_WINDOW_MINUTES } from '../config/constants.ts';
+import type { JWTPayload } from '../types/global-types.ts';
 import { setAuthCookie } from '../utils/cookie.ts';
 import { TokenPayloadError } from '../utils/errors.ts';
-import { type JWTPayload, signToken } from '../utils/jwt.ts';
+import { signToken } from '../utils/jwt.ts';
 
 export function renewToken(
   request: FastifyRequest,
@@ -16,7 +17,7 @@ export function renewToken(
 ): void {
   try {
     if (reply.statusCode >= 200 && reply.statusCode < 300) {
-      const tokenPayload = request.user;
+      const tokenPayload = request.user as JWTPayload;
       if (!tokenPayload || typeof tokenPayload.exp === 'undefined') {
         throw new TokenPayloadError(
           'Token expiration time not found or user not authenticated.'

@@ -9,18 +9,13 @@ import {
   removeCartItemService,
   updateCartItemService,
 } from '../services/cart-service.ts';
-import { NotFoundError } from '../utils/errors.ts';
+import { getUserId } from '../services/helpers/user-helpers.ts';
 
 export async function updateCartItem(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const payloadUserId = request.user?.userId;
-  if (!payloadUserId) {
-    throw new NotFoundError('User not found.');
-  }
-
-  const userId = new mongoose.Types.ObjectId(payloadUserId);
+  const userId = new mongoose.Types.ObjectId(getUserId(request.user));
   const { cart, action } = await updateCartItemService(
     userId,
     request.body as PostCartBodyType
@@ -49,12 +44,7 @@ export async function deleteCartItem(
   reply: FastifyReply
 ) {
   const { id: itemId, size } = request.params as DeleteCartItemParamsType;
-  const payloadUserId = request.user?.userId;
-  if (!payloadUserId) {
-    throw new NotFoundError('User not found.');
-  }
-
-  const userId = new mongoose.Types.ObjectId(payloadUserId);
+  const userId = new mongoose.Types.ObjectId(getUserId(request.user));
   await removeCartItemService(userId, itemId, size);
 
   return reply
@@ -63,12 +53,7 @@ export async function deleteCartItem(
 }
 
 export async function clearCart(request: FastifyRequest, reply: FastifyReply) {
-  const payloadUserId = request.user?.userId;
-  if (!payloadUserId) {
-    throw new NotFoundError('User not found.');
-  }
-
-  const userId = new mongoose.Types.ObjectId(payloadUserId);
+  const userId = new mongoose.Types.ObjectId(getUserId(request.user));
   await clearCartService(userId);
 
   return reply

@@ -42,7 +42,7 @@ export class ConflictError extends AppError {
 }
 
 export class DataIntegrityError extends AppError {
-  constructor(message = 'Data integrity error') {
+  constructor(message = 'Data integrity error.') {
     super(message, 422);
   }
 }
@@ -54,7 +54,7 @@ export class TokenPayloadError extends AppError {
 }
 
 export class CloudinaryError extends AppError {
-  constructor(message = 'Cloudinary service failed') {
+  constructor(message = 'Cloudinary service failed.') {
     super(message, 502);
   }
 }
@@ -73,6 +73,7 @@ export const errorHandler = (
     return reply.status(400).send({
       message: 'Validation failed.',
       errors: errorMessages,
+      success: false
     });
   }
 
@@ -87,6 +88,7 @@ export const errorHandler = (
     reply.status(400).send({
       message: 'Data validation failure.',
       errors,
+      success: false
     });
     return;
   }
@@ -94,6 +96,7 @@ export const errorHandler = (
   if (error instanceof AppError) {
     reply.status(error.statusCode).send({
       message: error.message,
+      success: false
     });
     return;
   }
@@ -101,5 +104,7 @@ export const errorHandler = (
   reply.log.error(error);
   reply.status(500).send({
     message: 'Internal server error.',
+    error,
+    success: false
   });
 };

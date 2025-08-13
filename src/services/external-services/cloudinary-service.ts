@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
-import type { ProcessedFile } from '../types/global-types.ts';
-import { CloudinaryError, DataIntegrityError } from '../utils/errors.ts';
+import type { ProcessedFile } from '../../types/global-types.ts';
+import { CloudinaryError, DataIntegrityError } from '../../utils/errors.ts';
 
 export async function uploadImagesToCloudinary(
   images: ProcessedFile[]

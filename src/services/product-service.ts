@@ -12,8 +12,8 @@ import { NotFoundError } from '../utils/errors.ts';
 import {
   deleteImagesFromCloudinary,
   uploadImagesToCloudinary,
-} from './cloudinary-service.ts';
-import { findProductOrThrow } from './product-helpers.ts';
+} from './external-services/cloudinary-service.ts';
+import { findProductOrThrow } from './helpers/product-helpers.ts';
 
 export async function createProductService(
   productData: CreateProductBodyType,
