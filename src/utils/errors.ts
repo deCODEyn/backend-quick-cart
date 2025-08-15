@@ -73,7 +73,7 @@ export const errorHandler = (
     return reply.status(400).send({
       message: 'Validation failed.',
       errors: errorMessages,
-      success: false
+      success: false,
     });
   }
 
@@ -88,7 +88,7 @@ export const errorHandler = (
     reply.status(400).send({
       message: 'Data validation failure.',
       errors,
-      success: false
+      success: false,
     });
     return;
   }
@@ -96,7 +96,7 @@ export const errorHandler = (
   if (error instanceof AppError) {
     reply.status(error.statusCode).send({
       message: error.message,
-      success: false
+      success: false,
     });
     return;
   }
@@ -105,6 +105,6 @@ export const errorHandler = (
   reply.status(500).send({
     message: 'Internal server error.',
     error,
-    success: false
+    success: false,
   });
 };

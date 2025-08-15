@@ -27,7 +27,7 @@ app.register(fastifyCookie);
 app.register(fastifyCors, {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type'],
   credentials: true,
 });
 
@@ -63,7 +63,7 @@ async function start() {
     await connectDB(app);
     connectCloudinary();
 
-    await app.listen({ port: env.PORT });
+    await app.listen({ port: env.PORT, host: '0.0.0.0' });
     app.log.info(`Server running on port ${env.PORT}`);
   } catch (err) {
     app.log.error(err);
