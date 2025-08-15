@@ -6,6 +6,7 @@ import type {
 } from '../schemas/routes-schemas/cart-route-schema.ts';
 import {
   clearCartService,
+  getCartItemsService,
   removeCartItemService,
   updateCartItemService,
 } from '../services/cart-service.ts';
@@ -22,12 +23,14 @@ export async function updateCartItem(
   );
 
   let message = '';
+  let status = 200;
   switch (action) {
     case 'removed':
       message = 'Item successfully removed from cart.';
       break;
     case 'added':
       message = 'Item successfully added to cart.';
+      status = 201;
       break;
     case 'updated':
       message = 'Cart item quantity updated.';
@@ -36,7 +39,13 @@ export async function updateCartItem(
       message = 'Cart has been updated.';
   }
 
-  return reply.status(200).send({ message, result: cart, success: true });
+  return reply.status(status).send({ message, result: cart, success: true });
+}
+
+export async function getCartItems(request: FastifyRequest, reply: FastifyReply) {
+  const userId = new mongoose.Types.ObjectId(getUserId(request.user));
+
+  reply.status(200).send({ user: userId, result: await getCartItemsService(userId), success: true });
 }
 
 export async function deleteCartItem(

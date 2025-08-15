@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import {
   clearCart,
   deleteCartItem,
+  getCartItems,
   updateCartItem,
 } from '../controllers/cart-controller.ts';
 import { validateAuth } from '../middleware/validate-auth.ts';
@@ -18,6 +19,14 @@ export function cartRoute(app: FastifyInstance) {
       preHandler: validateAuth,
     },
     updateCartItem
+  );
+  app.get(
+    '/api/cart',
+    {
+      schema: {},
+      preHandler: validateAuth,
+    },
+    getCartItems
   );
   app.delete(
     '/api/cart/:id/:size',

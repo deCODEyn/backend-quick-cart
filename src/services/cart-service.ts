@@ -86,3 +86,7 @@ export async function updateCartItemService(
     action: 'added',
   };
 }
+
+export async function getCartItemsService(userId: Types.ObjectId) {
+  return await CartModel.findOne({ userId });
+}
