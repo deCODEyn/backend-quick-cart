@@ -11,6 +11,7 @@ import { connectCloudinary } from './config/cloudinary.ts';
 import { MAX_FILE_SIZE } from './config/constants.ts';
 import { connectDB } from './config/mongodb.ts';
 import { env } from './env.ts';
+import { addressRoute } from './routes/address-route.ts';
 import { cartRoute } from './routes/cart-route.ts';
 import { productRoute } from './routes/product-route.ts';
 import { userRoute } from './routes/user-route.ts';
@@ -56,6 +57,7 @@ app.get('/api/health', () => {
 app.register(userRoute);
 app.register(productRoute);
 app.register(cartRoute);
+app.register(addressRoute);
 
 // -- 8. APP START --
 async function start() {
