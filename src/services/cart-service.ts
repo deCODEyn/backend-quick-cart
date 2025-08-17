@@ -1,6 +1,5 @@
 import type { Types } from 'mongoose';
 import { type CartDocumentInterface, CartModel } from '../models/cart-model.ts';
-import type { PostCartBodyType } from '../schemas/routes-schemas/cart-route-schema.ts';
 import type { UpdateCartItemResult } from '../types/global-types.ts';
 
 export async function clearCartService(
@@ -11,7 +10,7 @@ export async function clearCartService(
 
 export async function removeCartItemService(
   userId: Types.ObjectId,
-  itemId: string,
+  itemId: Types.ObjectId,
   size: string
 ): Promise<CartDocumentInterface | null> {
   const updatedCart = await CartModel.findOneAndUpdate(
@@ -19,7 +18,7 @@ export async function removeCartItemService(
     { $pull: { items: { id: itemId, size } } },
     { new: true }
   ).exec();
-  if (updatedCart && updatedCart.items.length === 0) {
+  if (updatedCart?.items.length === 0) {
     return await clearCartService(userId);
   }
   return updatedCart;
@@ -27,27 +26,26 @@ export async function removeCartItemService(
 
 export async function updateExistingCartItemService(
   userId: Types.ObjectId,
-  itemId: string,
+  itemId: Types.ObjectId,
   size: string,
   quantity: number
 ): Promise<CartDocumentInterface | null> {
   const updatedCart = await CartModel.findOneAndUpdate(
+    { userId },
     {
-      userId,
-      'items.id': itemId,
-      'items.size': size,
+      $set: { 'items.$[elem].quantity': quantity },
     },
     {
-      $set: { 'items.$.quantity': quantity },
-    },
-    { new: true }
+      new: true,
+      arrayFilters: [{ 'elem.id': itemId, 'elem.size': size }],
+    }
   ).exec();
   return updatedCart;
 }
 
 export async function addNewCartItemService(
   userId: Types.ObjectId,
-  itemId: string,
+  itemId: Types.ObjectId,
   size: string,
   quantity: number
 ): Promise<CartDocumentInterface | null> {
@@ -61,9 +59,10 @@ export async function addNewCartItemService(
 
 export async function updateCartItemService(
   userId: Types.ObjectId,
-  itemData: PostCartBodyType
+  itemId: Types.ObjectId,
+  size: string,
+  quantity: number
 ): Promise<UpdateCartItemResult> {
-  const { id: itemId, size, quantity } = itemData;
   if (quantity <= 0) {
     return {
       cart: await removeCartItemService(userId, itemId, size),
@@ -77,7 +76,11 @@ export async function updateCartItemService(
     size,
     quantity
   );
-  if (updatedCart) {
+  if (
+    updatedCart?.items.some(
+      (item) => item.id.equals(itemId) && item.size === size
+    )
+  ) {
     return { cart: updatedCart, action: 'updated' };
   }
 
@@ -87,6 +90,8 @@ export async function updateCartItemService(
   };
 }
 
-export async function getCartItemsService(userId: Types.ObjectId) {
+export async function getCartItemsService(
+  userId: Types.ObjectId
+): Promise<CartDocumentInterface | null> {
   return await CartModel.findOne({ userId });
 }

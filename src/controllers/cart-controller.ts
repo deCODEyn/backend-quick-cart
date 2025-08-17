@@ -17,9 +17,14 @@ export async function updateCartItem(
   reply: FastifyReply
 ) {
   const userId = new mongoose.Types.ObjectId(getUserId(request.user));
+  const { id, quantity, size } = request.body as PostCartBodyType;
+  const itemId = new mongoose.Types.ObjectId(id);
+
   const { cart, action } = await updateCartItemService(
     userId,
-    request.body as PostCartBodyType
+    itemId,
+    size,
+    quantity
   );
 
   let message = '';
@@ -39,26 +44,36 @@ export async function updateCartItem(
       message = 'Cart has been updated.';
   }
 
-  return reply.status(status).send({ message, result: cart, success: true });
+  return reply
+    .status(status)
+    .send({ message, result: cart?.items, success: true });
 }
 
-export async function getCartItems(request: FastifyRequest, reply: FastifyReply) {
+export async function getCartItems(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
   const userId = new mongoose.Types.ObjectId(getUserId(request.user));
+  const cart = await getCartItemsService(userId);
 
-  reply.status(200).send({ user: userId, result: await getCartItemsService(userId), success: true });
+  reply.status(200).send({ result: cart?.items, success: true });
 }
 
 export async function deleteCartItem(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id: itemId, size } = request.params as DeleteCartItemParamsType;
   const userId = new mongoose.Types.ObjectId(getUserId(request.user));
-  await removeCartItemService(userId, itemId, size);
+  const { id, size } = request.params as DeleteCartItemParamsType;
+  const itemId = new mongoose.Types.ObjectId(id);
 
-  return reply
-    .status(200)
-    .send({ message: 'Item successfully removed from cart.', success: true });
+  const cart = await removeCartItemService(userId, itemId, size);
+
+  return reply.status(200).send({
+    message: 'Item successfully removed from cart.',
+    result: cart?.items,
+    success: true,
+  });
 }
 
 export async function clearCart(request: FastifyRequest, reply: FastifyReply) {

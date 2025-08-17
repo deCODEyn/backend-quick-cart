@@ -1,9 +1,8 @@
-import mongoose, { type Document, type Model, type Types } from 'mongoose';
+import mongoose, { type Document, type Model } from 'mongoose';
+import { VALID_SIZES_ENUM } from '../config/constants.ts';
 import type { CartType } from '../schemas/cart-schema.ts';
 
-export interface CartDocumentInterface extends CartType, Document {
-  _id: Types.ObjectId;
-}
+export interface CartDocumentInterface extends CartType, Document {}
 
 export interface CartModelInterface extends Model<CartDocumentInterface> {}
 
@@ -21,8 +20,12 @@ const CartDBSchema = new mongoose.Schema<
     items: {
       type: [
         {
-          id: { type: String, required: true },
-          size: { type: String, required: true },
+          id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true,
+          },
+          size: { type: String, required: true, enum: VALID_SIZES_ENUM },
           quantity: { type: Number, required: true },
         },
       ],
@@ -32,8 +35,9 @@ const CartDBSchema = new mongoose.Schema<
   { timestamps: true }
 );
 
-export const CartModel = ((mongoose.models.Cart as CartModelInterface) ||
+export const CartModel =
+  (mongoose.models.Cart as CartModelInterface) ||
   mongoose.model<CartDocumentInterface, CartModelInterface>(
     'Cart',
     CartDBSchema
-  )) as mongoose.Model<CartDocumentInterface, CartModelInterface>;
+  );

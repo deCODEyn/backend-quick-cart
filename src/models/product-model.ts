@@ -1,10 +1,8 @@
-import mongoose, { type Document, type Model, type Types } from 'mongoose';
+import mongoose, { type Document, type Model } from 'mongoose';
 import { VALID_SIZES_ENUM } from '../config/constants.ts';
 import type { ProductType } from '../schemas/product-schema.ts';
 
-export interface ProductDocumentInterface extends ProductType, Document {
-  _id: Types.ObjectId;
-}
+export interface ProductDocumentInterface extends ProductType, Document {}
 export interface ProductModelInterface
   extends Model<ProductDocumentInterface> {}
 
@@ -25,9 +23,9 @@ const productDBSchema = new mongoose.Schema<
   { timestamps: true }
 );
 
-export const ProductModel = ((mongoose.models
-  .Product as ProductModelInterface) ||
+export const ProductModel =
+  (mongoose.models.Product as ProductModelInterface) ||
   mongoose.model<ProductDocumentInterface, ProductModelInterface>(
     'Product',
     productDBSchema
-  )) as mongoose.Model<ProductDocumentInterface, ProductModelInterface>;
+  );

@@ -3,7 +3,7 @@ import { VALID_SIZES_ENUM } from '../config/constants.ts';
 import { objectIdSchema } from './utils.ts';
 
 export const cartItemBaseSchema = z.object({
-  id: z.string().nonempty('Product ID cannot be empty.'),
+  id: objectIdSchema,
   size: z.enum(VALID_SIZES_ENUM),
 });
 

@@ -60,7 +60,7 @@ export async function loginUser(
 
   return reply
     .status(200)
-    .send({ message: 'Login successfully.', success: true });
+    .send({ message: 'Login successful.', success: true });
 }
 
 export function getMe(request: FastifyRequest, reply: FastifyReply) {
