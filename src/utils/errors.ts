@@ -85,24 +85,22 @@ export const errorHandler = (
       };
     });
 
-    reply.status(400).send({
+    return reply.status(400).send({
       message: 'Data validation failure.',
       errors,
       success: false,
     });
-    return;
   }
 
   if (error instanceof AppError) {
-    reply.status(error.statusCode).send({
+    return reply.status(error.statusCode).send({
       message: error.message,
       success: false,
     });
-    return;
   }
 
   reply.log.error(error);
-  reply.status(500).send({
+  return reply.status(500).send({
     message: 'Internal server error.',
     error,
     success: false,

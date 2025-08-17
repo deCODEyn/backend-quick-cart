@@ -2,7 +2,6 @@ import {
   type ProductDocumentInterface,
   ProductModel,
 } from '../models/product-model.ts';
-import type { ProductType } from '../schemas/product-schema.ts';
 import type {
   CreateProductBodyType,
   UpdateProductBodyType,
@@ -20,12 +19,11 @@ export async function createProductService(
   images: ProcessedFile[]
 ): Promise<ProductDocumentInterface> {
   const imageUrls = await uploadImagesToCloudinary(images);
-  const productToSave: ProductType = { ...productData, image: imageUrls };
 
-  const newProduct = new ProductModel(productToSave);
-  await newProduct.save();
+  const newProduct = new ProductModel({ ...productData, image: imageUrls });
+  const savedProduct = await newProduct.save();
 
-  return newProduct;
+  return savedProduct;
 }
 
 export async function listProductsService(): Promise<

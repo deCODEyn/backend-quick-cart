@@ -1,5 +1,5 @@
 import 'fastify';
-import type { JWTPayload } from '../utils/jwt.ts';
+import type { JWTPayload } from './global-types.ts';
 
 declare module 'fastify' {
   interface FastifyRequest {

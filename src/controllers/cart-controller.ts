@@ -1,5 +1,4 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import mongoose from 'mongoose';
 import type {
   DeleteCartItemParamsType,
   PostCartBodyType,
@@ -16,9 +15,8 @@ export async function updateCartItem(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const userId = new mongoose.Types.ObjectId(getUserId(request.user));
-  const { id, quantity, size } = request.body as PostCartBodyType;
-  const itemId = new mongoose.Types.ObjectId(id);
+  const userId = getUserId(request.user);
+  const { id: itemId, quantity, size } = request.body as PostCartBodyType;
 
   const { cart, action } = await updateCartItemService(
     userId,
@@ -44,28 +42,32 @@ export async function updateCartItem(
       message = 'Cart has been updated.';
   }
 
-  return reply
-    .status(status)
-    .send({ message, result: cart?.items, success: true });
+  return reply.status(status).send({
+    message,
+    result: cart?.items,
+    success: true,
+  });
 }
 
 export async function getCartItems(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const userId = new mongoose.Types.ObjectId(getUserId(request.user));
+  const userId = getUserId(request.user);
   const cart = await getCartItemsService(userId);
 
-  reply.status(200).send({ result: cart?.items, success: true });
+  return reply.status(200).send({
+    result: cart?.items,
+    success: true,
+  });
 }
 
 export async function deleteCartItem(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const userId = new mongoose.Types.ObjectId(getUserId(request.user));
-  const { id, size } = request.params as DeleteCartItemParamsType;
-  const itemId = new mongoose.Types.ObjectId(id);
+  const userId = getUserId(request.user);
+  const { id: itemId, size } = request.params as DeleteCartItemParamsType;
 
   const cart = await removeCartItemService(userId, itemId, size);
 
@@ -77,10 +79,11 @@ export async function deleteCartItem(
 }
 
 export async function clearCart(request: FastifyRequest, reply: FastifyReply) {
-  const userId = new mongoose.Types.ObjectId(getUserId(request.user));
+  const userId = getUserId(request.user);
   await clearCartService(userId);
 
-  return reply
-    .status(200)
-    .send({ message: 'Your cart has been discarded.', success: true });
+  return reply.status(200).send({
+    message: 'Your cart has been discarded.',
+    success: true,
+  });
 }

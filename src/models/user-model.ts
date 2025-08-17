@@ -1,10 +1,11 @@
 import bcrypt from 'bcrypt';
-import mongoose, { type Document, type Model } from 'mongoose';
+import mongoose, { type Document, type Model, type Types } from 'mongoose';
 import { USER_ROLE_ENUM } from '../config/constants.ts';
 import type { UserType } from '../schemas/user-schema.ts';
 
 export interface UserDocumentInterface extends UserType, Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
+  _id: Types.ObjectId;
 }
 export interface UserModelInterface extends Model<UserDocumentInterface> {}
 

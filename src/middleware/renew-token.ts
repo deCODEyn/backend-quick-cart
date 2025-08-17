@@ -17,7 +17,7 @@ export function renewToken(
 ): void {
   try {
     if (reply.statusCode >= 200 && reply.statusCode < 300) {
-      const tokenPayload = request.user as JWTPayload;
+      const tokenPayload = request.user;
       if (!tokenPayload || typeof tokenPayload.exp === 'undefined') {
         throw new TokenPayloadError(
           'Token expiration time not found or user not authenticated.'

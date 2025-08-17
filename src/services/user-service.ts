@@ -9,9 +9,9 @@ export async function findUserByEmail(email: string) {
 
 export async function createUser(userData: UserType): Promise<UserPublicType> {
   const newUser = new userModel(userData);
-  await newUser.save();
+  const savedUser = await newUser.save();
 
-  const { _id, email, name, role } = newUser.toObject();
+  const { _id, email, name, role } = savedUser;
 
   return { id: _id.toString(), name, email, role };
 }

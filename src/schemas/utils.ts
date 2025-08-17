@@ -10,12 +10,20 @@ export const jwtPayloadSchema = z.object({
   exp: z.number().optional(),
 });
 
-export const objectIdSchema = z.custom<mongoose.Types.ObjectId>(
-  (val) => {
-    if (typeof val !== 'string') {
-      return false;
+export const objectIdSchema = z
+  .string({
+    message: 'ID is required.',
+  })
+  .refine(
+    (val) => {
+      return mongoose.Types.ObjectId.isValid(val);
+    },
+    {
+      message: 'Invalid ObjectId.',
     }
-    return mongoose.Types.ObjectId.isValid(val);
-  },
-  { message: 'Invalid ObjectId.' }
-);
+  )
+  .transform((val) => {
+    return new mongoose.Types.ObjectId(val);
+  });
+
+export type ObjectIdType = z.infer<typeof objectIdSchema>;

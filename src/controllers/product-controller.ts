@@ -30,17 +30,19 @@ export async function listProducts(
   _request: FastifyRequest,
   reply: FastifyReply
 ) {
-  return reply
-    .status(200)
-    .send({ result: await listProductsService(), success: true });
+  return reply.status(200).send({
+    result: await listProductsService(),
+    success: true,
+  });
 }
 
 export async function getProduct(request: FastifyRequest, reply: FastifyReply) {
   const { id: productId } = request.params as GetProductParamsType;
 
-  return reply
-    .status(200)
-    .send({ result: await getProductService(productId), success: true });
+  return reply.status(200).send({
+    result: await getProductService(productId),
+    success: true,
+  });
 }
 
 export async function updateProduct(

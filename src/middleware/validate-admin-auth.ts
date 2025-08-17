@@ -3,7 +3,6 @@ import type {
   FastifyRequest,
   HookHandlerDoneFunction,
 } from 'fastify';
-import type { JWTPayload } from '../types/global-types.ts';
 import { UnauthorizedError } from '../utils/errors.ts';
 
 export function validateAdminAuth(
@@ -11,8 +10,8 @@ export function validateAdminAuth(
   _reply: FastifyReply,
   done: HookHandlerDoneFunction
 ): void {
-  const user = request.user as JWTPayload;
-  if (user.role !== 'Admin') {
+  const user = request.user;
+  if (user?.role !== 'Admin') {
     throw new UnauthorizedError('Access denied: Insufficient privileges.');
   }
   done();

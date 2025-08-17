@@ -8,16 +8,19 @@ import {
   createUser,
   findUserByEmail,
 } from '../services/user-service.ts';
-import type { JWTPayload } from '../types/global-types.ts';
 import { clearAuthCookie, setAuthCookie } from '../utils/cookie.ts';
-import { BadRequestError, ConflictError } from '../utils/errors.ts';
+import {
+  BadRequestError,
+  ConflictError,
+  UnauthorizedError,
+} from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
 
 export async function registerUser(
-  request: FastifyRequest<{ Body: RegisterBodyType }>,
+  request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const userData = request.body;
+  const userData = request.body as RegisterBodyType;
 
   const userExists = await findUserByEmail(userData.email);
   if (userExists) {
@@ -45,11 +48,8 @@ export async function registerUser(
   });
 }
 
-export async function loginUser(
-  request: FastifyRequest<{ Body: LoginBodyType }>,
-  reply: FastifyReply
-) {
-  const { email, password } = request.body;
+export async function loginUser(request: FastifyRequest, reply: FastifyReply) {
+  const { email, password } = request.body as LoginBodyType;
 
   const token = await authenticateUser(email, password);
   if (!token) {
@@ -58,13 +58,17 @@ export async function loginUser(
 
   setAuthCookie(reply, token);
 
-  return reply
-    .status(200)
-    .send({ message: 'Login successful.', success: true });
+  return reply.status(200).send({
+    message: 'Login successful.',
+    success: true,
+  });
 }
 
 export function getMe(request: FastifyRequest, reply: FastifyReply) {
-  const user = request.user as JWTPayload;
+  if (!request.user) {
+    throw new UnauthorizedError('User is not logged in.');
+  }
+  const user = request.user;
 
   return reply.status(200).send({
     message: 'User profile fetched successfully.',
