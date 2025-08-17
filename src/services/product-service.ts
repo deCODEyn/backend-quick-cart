@@ -33,12 +33,13 @@ export async function listProductsService(): Promise<
 }
 
 export async function deleteProductService(productId: string): Promise<void> {
-  const product = await findProductOrThrow(productId);
-  if (product.image) {
-    await deleteImagesFromCloudinary(product.image);
+  const deletedProduct = await ProductModel.findByIdAndDelete(productId).exec();
+  if (!deletedProduct) {
+    throw new NotFoundError('Product not found.');
   }
-
-  await ProductModel.findByIdAndDelete(productId).exec();
+  if (deletedProduct.image) {
+    await deleteImagesFromCloudinary(deletedProduct.image);
+  }
 
   return;
 }
@@ -62,7 +63,8 @@ export async function updateProductService(
     }
   ).exec();
   if (!updatedProduct) {
-    throw new NotFoundError('Product not found after update.');
+    throw new NotFoundError('Product not found.');
   }
+
   return updatedProduct;
 }

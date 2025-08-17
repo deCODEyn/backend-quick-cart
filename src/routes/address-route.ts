@@ -8,12 +8,17 @@ import {
 } from '../controllers/address-controller.ts';
 import { renewToken } from '../middleware/renew-token.ts';
 import { validateAuth } from '../middleware/validate-auth.ts';
+import {
+  getAddressParamsSchema,
+  postAddressBodySchema,
+  updateAddressBodySchema,
+} from '../schemas/routes-schemas/address-route-schema.ts';
 
 export function addressRoute(app: FastifyInstance) {
   app.post(
     '/api/address',
     {
-      schema: {},
+      schema: { body: postAddressBodySchema },
       preHandler: [validateAuth],
       onSend: renewToken,
     },
@@ -22,7 +27,6 @@ export function addressRoute(app: FastifyInstance) {
   app.get(
     '/api/address',
     {
-      schema: {},
       preHandler: [validateAuth],
       onSend: renewToken,
     },
@@ -31,7 +35,7 @@ export function addressRoute(app: FastifyInstance) {
   app.get(
     '/api/address/:id',
     {
-      schema: {},
+      schema: { params: getAddressParamsSchema },
       preHandler: [validateAuth],
       onSend: renewToken,
     },
@@ -40,7 +44,10 @@ export function addressRoute(app: FastifyInstance) {
   app.patch(
     '/api/address/:id',
     {
-      schema: {},
+      schema: {
+        params: getAddressParamsSchema,
+        body: updateAddressBodySchema,
+      },
       preHandler: [validateAuth],
       onSend: renewToken,
     },
@@ -49,7 +56,9 @@ export function addressRoute(app: FastifyInstance) {
   app.delete(
     '/api/address/:id',
     {
-      schema: {},
+      schema: {
+        params: getAddressParamsSchema,
+      },
       preHandler: [validateAuth],
       onSend: renewToken,
     },

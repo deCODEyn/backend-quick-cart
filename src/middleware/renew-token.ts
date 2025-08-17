@@ -4,7 +4,6 @@ import type {
   HookHandlerDoneFunction,
 } from 'fastify';
 import { RENEW_WINDOW_MINUTES } from '../config/constants.ts';
-import type { JWTPayload } from '../types/global-types.ts';
 import { setAuthCookie } from '../utils/cookie.ts';
 import { TokenPayloadError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
@@ -27,7 +26,12 @@ export function renewToken(
       const nowInSeconds = Math.floor(Date.now() / 1000);
       const expiresInSeconds = tokenPayload.exp - nowInSeconds;
       if (expiresInSeconds < RENEW_WINDOW_MINUTES * 60) {
-        const newToken = signToken(tokenPayload as JWTPayload);
+        const newPayload = {
+          userId: tokenPayload.userId,
+          email: tokenPayload.email,
+          role: tokenPayload.role,
+        };
+        const newToken = signToken(newPayload);
         setAuthCookie(reply, newToken);
       }
     }

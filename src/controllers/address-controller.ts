@@ -1,36 +1,80 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import type {
+  GetAddressParamsType,
+  PostAddressBodyType,
+  updateAddressBodyType,
+} from '../schemas/routes-schemas/address-route-schema.ts';
+import {
+  createAddressService,
+  deleteAddressService,
+  getAddressService,
+  listAddressesService,
+  updateAddressService,
+} from '../services/address-service.ts';
+import { getUserId } from '../services/helpers/user-helpers.ts';
 
-export function createAddress(_request: FastifyRequest, reply: FastifyReply) {
-  reply.status(200).send({
-    message: 'Rota createAddress -> Post: /api/address OK',
+export async function createAddress(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const userId = getUserId(request.user);
+  const body = request.body as PostAddressBodyType;
+  const result = await createAddressService(userId, body);
+
+  return reply.status(201).send({
+    message: 'Address create successfully',
+    result,
     success: true,
   });
 }
 
-export function listAddresses(_request: FastifyRequest, reply: FastifyReply) {
-  reply.status(200).send({
-    message: 'Rota listAddresses -> Get: /api/address OK',
+export async function listAddresses(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const userId = getUserId(request.user);
+
+  return reply.status(200).send({
+    result: await listAddressesService(userId),
     success: true,
   });
 }
 
-export function getAddress(_request: FastifyRequest, reply: FastifyReply) {
-  reply.status(200).send({
-    message: 'Rota getAddress -> Get: /api/address/:id OK',
+export async function getAddress(request: FastifyRequest, reply: FastifyReply) {
+  const userId = getUserId(request.user);
+  const { id: addressId } = request.params as GetAddressParamsType;
+
+  return reply.status(200).send({
+    result: await getAddressService(addressId, userId),
     success: true,
   });
 }
 
-export function updateAddress(_request: FastifyRequest, reply: FastifyReply) {
+export async function updateAddress(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const userId = getUserId(request.user);
+  const { id: addressId } = request.params as GetAddressParamsType;
+  const updateData = request.body as updateAddressBodyType;
+
   reply.status(200).send({
-    message: 'Rota updateAddress -> Patch: /api/address/:id OK',
+    message: 'Address updated successfully.',
+    result: await updateAddressService(userId, addressId, updateData),
     success: true,
   });
 }
 
-export function deleteAddress(_request: FastifyRequest, reply: FastifyReply) {
+export async function deleteAddress(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const userId = getUserId(request.user);
+  const { id: addressId } = request.params as GetAddressParamsType;
+  await deleteAddressService(userId, addressId);
+
   reply.status(200).send({
-    message: 'Rota deleteAddress -> Delete: /api/address/:id OK',
+    message: 'Address deleted successfully.',
     success: true,
   });
 }
