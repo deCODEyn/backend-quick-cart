@@ -11,15 +11,20 @@ import { connectCloudinary } from './config/cloudinary.ts';
 import { MAX_FILE_SIZE } from './config/constants.ts';
 import { connectDB } from './config/mongodb.ts';
 import { env } from './env.ts';
-import { addressRoute } from './routes/address-route.ts';
-import { cartRoute } from './routes/cart-route.ts';
-import { orderRoute } from './routes/order-route.ts';
-import { productRoute } from './routes/product-route.ts';
-import { userRoute } from './routes/user-route.ts';
+import { appRoutes } from './plugins/app-routes.ts';
 import { errorHandler } from './utils/errors.ts';
 
 const app = fastify({
-  logger: { level: 'info' },
+  logger: {
+    level: 'info',
+    // transport: {
+    //   target: 'pino-pretty',
+    //   options: {
+    //     translateTime: 'HH:MM:ss Z',
+    //     ignore: 'pid,hostname',
+    //   }
+    // }
+  },
   disableRequestLogging: true,
 }).withTypeProvider<ZodTypeProvider>();
 
@@ -55,11 +60,7 @@ app.get('/api/health', () => {
 });
 
 // -- 7. REGISTRO DAS ROTAS DA APLICAÇÃO --
-app.register(userRoute);
-app.register(productRoute);
-app.register(cartRoute);
-app.register(addressRoute);
-app.register(orderRoute);
+app.register(appRoutes);
 
 // -- 8. APP START --
 async function start() {

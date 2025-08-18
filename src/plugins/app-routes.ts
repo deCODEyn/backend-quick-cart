@@ -1,0 +1,19 @@
+import type { FastifyInstance } from 'fastify';
+import { addressRoutes } from '../routes/address-route.ts';
+import { cartRoutes } from '../routes/cart-route.ts';
+import { orderRoutes } from '../routes/order-route.ts';
+import { productRoutes } from '../routes/product-route.ts';
+import { userRoutes } from '../routes/user-route.ts';
+
+export function appRoutes(app: FastifyInstance) {
+  app.register(
+    (routes) => {
+      routes.register(userRoutes);
+      routes.register(productRoutes);
+      routes.register(cartRoutes);
+      routes.register(addressRoutes);
+      routes.register(orderRoutes);
+    },
+    { prefix: '/api' }
+  );
+}

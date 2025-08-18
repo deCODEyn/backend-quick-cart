@@ -1,14 +1,10 @@
-import type {
-  FastifyReply,
-  FastifyRequest,
-  HookHandlerDoneFunction,
-} from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import { UnauthorizedError } from '../utils/errors.ts';
 
 export function validateAdminAuth(
   request: FastifyRequest,
   _reply: FastifyReply,
-  done: HookHandlerDoneFunction
+  done: () => void
 ): void {
   const user = request.user;
   if (user?.role !== 'Admin') {

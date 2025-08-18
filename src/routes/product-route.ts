@@ -15,46 +15,40 @@ import {
   updateProductBodySchema,
 } from '../schemas/routes-schemas/product-route-schema.ts';
 
-export function productRoute(app: FastifyInstance) {
-  app.post(
-    '/api/products',
-    {
-      preHandler: [validateAuth, validateAdminAuth, preHandlerProduct],
-      onSend: renewToken,
-    },
-    createProduct
-  );
-  app.get('/api/products', listProducts);
-  app.get(
-    '/api/products/:id',
-    {
-      schema: {
-        params: getProductParamsSchema,
+export function productRoutes(app: FastifyInstance) {
+  app.register((publicRoutes) => {
+    publicRoutes.get('/products', listProducts);
+    publicRoutes.get(
+      '/products/:id',
+      { schema: { params: getProductParamsSchema } },
+      getProduct
+    );
+  });
+
+  app.register((privateRoutes) => {
+    privateRoutes.addHook('preHandler', validateAuth);
+    privateRoutes.addHook('preHandler', validateAdminAuth);
+    privateRoutes.addHook('onSend', renewToken);
+
+    privateRoutes.post(
+      '/products',
+      { preHandler: [preHandlerProduct] },
+      createProduct
+    );
+    privateRoutes.patch(
+      '/products/:id',
+      {
+        schema: {
+          params: getProductParamsSchema,
+          body: updateProductBodySchema,
+        },
       },
-    },
-    getProduct
-  );
-  app.patch(
-    '/api/products/:id',
-    {
-      schema: {
-        params: getProductParamsSchema,
-        body: updateProductBodySchema,
-      },
-      preHandler: [validateAuth, validateAdminAuth],
-      onSend: renewToken,
-    },
-    updateProduct
-  );
-  app.delete(
-    '/api/products/:id',
-    {
-      schema: {
-        params: getProductParamsSchema,
-      },
-      preHandler: [validateAuth, validateAdminAuth],
-      onSend: renewToken,
-    },
-    deleteProduct
-  );
+      updateProduct
+    );
+    privateRoutes.delete(
+      '/products/:id',
+      { schema: { params: getProductParamsSchema } },
+      deleteProduct
+    );
+  });
 }

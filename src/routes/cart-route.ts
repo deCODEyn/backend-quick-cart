@@ -5,42 +5,29 @@ import {
   getCartItems,
   updateCartItem,
 } from '../controllers/cart-controller.ts';
+import { renewToken } from '../middleware/renew-token.ts';
 import { validateAuth } from '../middleware/validate-auth.ts';
 import {
   deleteCartItemParamsSchema,
   postCartBodySchema,
 } from '../schemas/routes-schemas/cart-route-schema.ts';
 
-export function cartRoute(app: FastifyInstance) {
-  app.post(
-    '/api/cart',
-    {
-      schema: { body: postCartBodySchema },
-      preHandler: validateAuth,
-    },
-    updateCartItem
-  );
-  app.get(
-    '/api/cart',
-    {
-      schema: {},
-      preHandler: validateAuth,
-    },
-    getCartItems
-  );
-  app.delete(
-    '/api/cart/:id/:size',
-    {
-      schema: { params: deleteCartItemParamsSchema },
-      preHandler: validateAuth,
-    },
-    deleteCartItem
-  );
-  app.delete(
-    '/api/cart',
-    {
-      preHandler: validateAuth,
-    },
-    clearCart
-  );
+export function cartRoutes(app: FastifyInstance) {
+  app.register((publicRoutes) => {
+    publicRoutes.addHook('preHandler', validateAuth);
+    publicRoutes.addHook('onSend', renewToken);
+
+    publicRoutes.post(
+      '/cart',
+      { schema: { body: postCartBodySchema } },
+      updateCartItem
+    );
+    publicRoutes.get('/cart', getCartItems);
+    publicRoutes.delete(
+      '/cart/:id/:size',
+      { schema: { params: deleteCartItemParamsSchema } },
+      deleteCartItem
+    );
+    publicRoutes.delete('/cart', clearCart);
+  });
 }

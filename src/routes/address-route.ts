@@ -14,54 +14,36 @@ import {
   updateAddressBodySchema,
 } from '../schemas/routes-schemas/address-route-schema.ts';
 
-export function addressRoute(app: FastifyInstance) {
-  app.post(
-    '/api/address',
-    {
-      schema: { body: createAddressBodySchema },
-      preHandler: [validateAuth],
-      onSend: renewToken,
-    },
-    createAddress
-  );
-  app.get(
-    '/api/address',
-    {
-      preHandler: [validateAuth],
-      onSend: renewToken,
-    },
-    listAddresses
-  );
-  app.get(
-    '/api/address/:id',
-    {
-      schema: { params: getAddressParamsSchema },
-      preHandler: [validateAuth],
-      onSend: renewToken,
-    },
-    getAddress
-  );
-  app.patch(
-    '/api/address/:id',
-    {
-      schema: {
-        params: getAddressParamsSchema,
-        body: updateAddressBodySchema,
+export function addressRoutes(app: FastifyInstance) {
+  app.register((publicRoutes) => {
+    publicRoutes.addHook('preHandler', validateAuth);
+    publicRoutes.addHook('onSend', renewToken);
+
+    publicRoutes.post(
+      '/address',
+      { schema: { body: createAddressBodySchema } },
+      createAddress
+    );
+    publicRoutes.get('/address', listAddresses);
+    publicRoutes.get(
+      '/address/:id',
+      { schema: { params: getAddressParamsSchema } },
+      getAddress
+    );
+    publicRoutes.patch(
+      '/address/:id',
+      {
+        schema: {
+          params: getAddressParamsSchema,
+          body: updateAddressBodySchema,
+        },
       },
-      preHandler: [validateAuth],
-      onSend: renewToken,
-    },
-    updateAddress
-  );
-  app.delete(
-    '/api/address/:id',
-    {
-      schema: {
-        params: getAddressParamsSchema,
-      },
-      preHandler: [validateAuth],
-      onSend: renewToken,
-    },
-    deleteAddress
-  );
+      updateAddress
+    );
+    publicRoutes.delete(
+      '/address/:id',
+      { schema: { params: getAddressParamsSchema } },
+      deleteAddress
+    );
+  });
 }

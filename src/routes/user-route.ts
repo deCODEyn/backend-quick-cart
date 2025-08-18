@@ -11,25 +11,19 @@ import {
   registerBodySchema,
 } from '../schemas/routes-schemas/user-route-schema.ts';
 
-export function userRoute(app: FastifyInstance) {
-  app.post(
-    '/api/user/register',
-    {
-      schema: {
-        body: registerBodySchema,
-      },
-    },
-    registerUser
-  );
-  app.post(
-    '/api/user/login',
-    {
-      schema: {
-        body: loginBodySchema,
-      },
-    },
-    loginUser
-  );
-  app.get('/api/user/me', { preHandler: [validateAuth] }, getMe);
-  app.post('/api/user/logout', logoutUser);
+export function userRoutes(app: FastifyInstance) {
+  app.register((publicRoutes) => {
+    publicRoutes.post(
+      '/user/register',
+      { schema: { body: registerBodySchema } },
+      registerUser
+    );
+    publicRoutes.post(
+      '/user/login',
+      { schema: { body: loginBodySchema } },
+      loginUser
+    );
+    publicRoutes.get('/user/me', { preHandler: [validateAuth] }, getMe);
+    publicRoutes.post('/user/logout', logoutUser);
+  });
 }
