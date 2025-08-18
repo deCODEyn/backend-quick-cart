@@ -4,7 +4,7 @@ import {
   AddressModel,
 } from '../models/address-model.ts';
 import type {
-  PostAddressBodyType,
+  CreateAddressBodyType,
   updateAddressBodyType,
 } from '../schemas/routes-schemas/address-route-schema.ts';
 import { NotFoundError } from '../utils/errors.ts';
@@ -12,7 +12,7 @@ import { findAddressOrThrow } from './helpers/address-helper.ts';
 
 export async function createAddressService(
   userId: Types.ObjectId,
-  body: PostAddressBodyType
+  body: CreateAddressBodyType
 ): Promise<AddressDocumentInterface> {
   const newAddress = new AddressModel({ userId, ...body });
   await newAddress.save();

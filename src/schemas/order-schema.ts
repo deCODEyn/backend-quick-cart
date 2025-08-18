@@ -3,7 +3,7 @@ import {
   VALID_ORDER_STATUSES_ENUM,
   VALID_SIZES_ENUM,
 } from '../config/constants.ts';
-import { orderAddressSchema } from './address-schema.ts';
+import { minimizeAddressSchema } from './address-schema.ts';
 import { objectIdSchema } from './utils.ts';
 
 export const orderProductSchema = z.object({
@@ -11,6 +11,7 @@ export const orderProductSchema = z.object({
   name: z.string().min(1, 'Product name is required.'),
   price: z.number().positive('Price must be a positive number.'),
 });
+export type OrderProductType = z.infer<typeof orderProductSchema>;
 
 export const orderItemSchema = z.object({
   product: orderProductSchema,
@@ -20,9 +21,10 @@ export const orderItemSchema = z.object({
     .positive('Quantity must be a positive number.'),
   size: z.enum(VALID_SIZES_ENUM),
 });
+export type OrderItemType = z.infer<typeof orderItemSchema>;
 
 export const orderSchema = z.object({
-  address: orderAddressSchema,
+  address: minimizeAddressSchema,
   amount: z.number().positive('Amount must be a positive number.'),
   items: z
     .array(orderItemSchema)
@@ -32,5 +34,4 @@ export const orderSchema = z.object({
   status: z.enum(VALID_ORDER_STATUSES_ENUM).optional(),
   userId: objectIdSchema,
 });
-
 export type OrderType = z.infer<typeof orderSchema>;

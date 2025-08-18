@@ -11,20 +11,16 @@ export function validateAuth(
   _reply: FastifyReply,
   done: HookHandlerDoneFunction
 ): void {
-  try {
-    const token = request.cookies['auth-token'];
-    if (!token) {
-      throw new UnauthorizedError('Token not provided.');
-    }
-
-    const payload = verifyAndValidateToken(token);
-    if (!payload) {
-      throw new UnauthorizedError('Invalid or expired token.');
-    }
-
-    request.user = payload;
-    done();
-  } catch (error) {
-    done(error as Error);
+  const token = request.cookies['auth-token'];
+  if (!token) {
+    throw new UnauthorizedError('Token not provided.');
   }
+
+  const payload = verifyAndValidateToken(token);
+  if (!payload) {
+    throw new UnauthorizedError('Invalid or expired token.');
+  }
+
+  request.user = payload;
+  done();
 }

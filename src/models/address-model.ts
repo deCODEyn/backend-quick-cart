@@ -1,11 +1,13 @@
 import type { Document, Model } from 'mongoose';
-import mongoose from 'mongoose';
+import mongoose, { type Types } from 'mongoose';
 import { ADDRESS_TYPE_ENUM } from '../config/constants.ts';
 import type { AddressType } from '../schemas/address-schema.ts';
 
-export interface AddressDocumentInterface extends AddressType, Document {}
+export interface AddressDocumentInterface extends AddressType, Document {
+  _id: Types.ObjectId;
+}
 export interface AddressModelInterface
-  extends Model<AddressDocumentInterface> {}
+  extends Model<AddressDocumentInterface> { }
 
 const addressDBSchema = new mongoose.Schema<
   AddressDocumentInterface,

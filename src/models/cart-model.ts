@@ -1,10 +1,12 @@
-import mongoose, { type Document, type Model } from 'mongoose';
+import mongoose, { type Document, type Model, type Types } from 'mongoose';
 import { VALID_SIZES_ENUM } from '../config/constants.ts';
 import type { CartType } from '../schemas/cart-schema.ts';
 
-export interface CartDocumentInterface extends CartType, Document {}
+export interface CartDocumentInterface extends CartType, Document {
+  _id: Types.ObjectId;
+}
 
-export interface CartModelInterface extends Model<CartDocumentInterface> {}
+export interface CartModelInterface extends Model<CartDocumentInterface> { }
 
 const CartDBSchema = new mongoose.Schema<
   CartDocumentInterface,

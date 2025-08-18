@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type {
+  CreateAddressBodyType,
   GetAddressParamsType,
-  PostAddressBodyType,
   updateAddressBodyType,
 } from '../schemas/routes-schemas/address-route-schema.ts';
 import {
@@ -18,7 +18,7 @@ export async function createAddress(
   reply: FastifyReply
 ) {
   const userId = getUserId(request.user);
-  const body = request.body as PostAddressBodyType;
+  const body = request.body as CreateAddressBodyType;
   const result = await createAddressService(userId, body);
 
   return reply.status(201).send({

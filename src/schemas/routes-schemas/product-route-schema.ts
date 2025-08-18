@@ -1,9 +1,7 @@
 import z from 'zod';
 import { productSchema } from '../product-schema.ts';
 
-export const createProductBodySchema = productSchema.omit({
-  image: true,
-});
+export const createProductBodySchema = productSchema.omit({ image: true });
 export type CreateProductBodyType = z.infer<typeof createProductBodySchema>;
 
 export const updateProductBodySchema = productSchema.partial().omit({

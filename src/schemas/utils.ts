@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import z from 'zod';
-import { USER_ROLE_ENUM } from '../config/constants.ts';
+import { USER_ROLE_ENUM, VALID_SIZES_ENUM } from '../config/constants.ts';
 
 export const jwtPayloadSchema = z.object({
   userId: z.string().min(1),
@@ -27,3 +27,6 @@ export const objectIdSchema = z
   });
 
 export type ObjectIdType = z.infer<typeof objectIdSchema>;
+
+export const sizeEnumSchema = z.enum(VALID_SIZES_ENUM);
+export type ValidSizeLiterals = z.infer<typeof sizeEnumSchema>;

@@ -1,15 +1,17 @@
-import mongoose, { type Document, type Model } from 'mongoose';
+import mongoose, { type Document, type Model, type Types } from 'mongoose';
 import {
   VALID_ORDER_STATUSES_ENUM,
   VALID_SIZES_ENUM,
 } from '../config/constants.ts';
 import type { OrderType } from '../schemas/order-schema.ts';
 
-export interface OrderDocumentIntrface extends OrderType, Document {}
-export interface OrderModelInterface extends Model<OrderDocumentIntrface> {}
+export interface OrderDocumentInterface extends OrderType, Document {
+  _id: Types.ObjectId;
+}
+export interface OrderModelInterface extends Model<OrderDocumentInterface> { }
 
 const OrderDBSchema = new mongoose.Schema<
-  OrderDocumentIntrface,
+  OrderDocumentInterface,
   OrderModelInterface
 >(
   {
@@ -48,7 +50,7 @@ const OrderDBSchema = new mongoose.Schema<
       city: { type: String, required: true },
       state: { type: String, required: true },
       country: { type: String, required: true },
-      postalCode: { type: String, required: true },
+      zipCode: { type: String, required: true },
     },
     status: {
       type: String,
@@ -64,7 +66,7 @@ const OrderDBSchema = new mongoose.Schema<
 
 export const OrderModel =
   (mongoose.models.Order as OrderModelInterface) ||
-  mongoose.model<OrderDocumentIntrface, OrderModelInterface>(
+  mongoose.model<OrderDocumentInterface, OrderModelInterface>(
     'Order',
     OrderDBSchema
   );

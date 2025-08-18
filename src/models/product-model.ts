@@ -1,8 +1,10 @@
-import mongoose, { type Document, type Model } from 'mongoose';
+import mongoose, { type Document, type Model, type Types } from 'mongoose';
 import { VALID_SIZES_ENUM } from '../config/constants.ts';
 import type { ProductType } from '../schemas/product-schema.ts';
 
-export interface ProductDocumentInterface extends ProductType, Document {}
+export interface ProductDocumentInterface extends ProductType, Document {
+  _id: Types.ObjectId;
+}
 export interface ProductModelInterface
   extends Model<ProductDocumentInterface> {}
 

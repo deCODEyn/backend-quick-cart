@@ -21,7 +21,7 @@ export const addressSchema = z.object({
 
 export type AddressType = z.infer<typeof addressSchema>;
 
-export const orderAddressSchema = addressSchema
+export const minimizeAddressSchema = addressSchema
   .pick({
     city: true,
     country: true,
@@ -33,3 +33,4 @@ export const orderAddressSchema = addressSchema
   .extend({
     addressId: objectIdSchema,
   });
+export type MinimizeAddressType = z.infer<typeof minimizeAddressSchema>;

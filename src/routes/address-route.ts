@@ -9,8 +9,8 @@ import {
 import { renewToken } from '../middleware/renew-token.ts';
 import { validateAuth } from '../middleware/validate-auth.ts';
 import {
+  createAddressBodySchema,
   getAddressParamsSchema,
-  postAddressBodySchema,
   updateAddressBodySchema,
 } from '../schemas/routes-schemas/address-route-schema.ts';
 
@@ -18,7 +18,7 @@ export function addressRoute(app: FastifyInstance) {
   app.post(
     '/api/address',
     {
-      schema: { body: postAddressBodySchema },
+      schema: { body: createAddressBodySchema },
       preHandler: [validateAuth],
       onSend: renewToken,
     },

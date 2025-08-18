@@ -13,6 +13,7 @@ import { connectDB } from './config/mongodb.ts';
 import { env } from './env.ts';
 import { addressRoute } from './routes/address-route.ts';
 import { cartRoute } from './routes/cart-route.ts';
+import { orderRoute } from './routes/order-route.ts';
 import { productRoute } from './routes/product-route.ts';
 import { userRoute } from './routes/user-route.ts';
 import { errorHandler } from './utils/errors.ts';
@@ -58,6 +59,7 @@ app.register(userRoute);
 app.register(productRoute);
 app.register(cartRoute);
 app.register(addressRoute);
+app.register(orderRoute);
 
 // -- 8. APP START --
 async function start() {
