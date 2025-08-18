@@ -6,7 +6,7 @@ export interface CartDocumentInterface extends CartType, Document {
   _id: Types.ObjectId;
 }
 
-export interface CartModelInterface extends Model<CartDocumentInterface> { }
+export interface CartModelInterface extends Model<CartDocumentInterface> {}
 
 const CartDBSchema = new mongoose.Schema<
   CartDocumentInterface,

@@ -41,14 +41,14 @@ export async function listOrdersService(
 
 export async function getOrderService(
   userId: Types.ObjectId,
-  orderId: string
+  orderId: Types.ObjectId
 ): Promise<OrderDocumentInterface> {
   return await findOrderOrThrow(orderId, userId);
 }
 
 export async function updateOrderService(
   userId: Types.ObjectId,
-  orderId: string,
+  orderId: Types.ObjectId,
   updateData: UpdateOrderBodyType
 ): Promise<OrderDocumentInterface> {
   const order = await findOrderOrThrow(orderId, userId);
@@ -75,7 +75,7 @@ export async function listAllOrdersService(): Promise<
 }
 
 export async function updateAllOrdersService(
-  orderId: string,
+  orderId: Types.ObjectId,
   updateData: UpdateOrderStatusBodyType
 ): Promise<OrderDocumentInterface> {
   const updatedOrder = await OrderModel.findOneAndUpdate(

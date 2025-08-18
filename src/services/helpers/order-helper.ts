@@ -6,7 +6,7 @@ import { NotFoundError } from '../../utils/errors.ts';
 import { findAndValidateProducts } from './product-helpers.ts';
 
 export async function findOrderOrThrow(
-  orderId: string | Types.ObjectId,
+  orderId: Types.ObjectId,
   userId: Types.ObjectId
 ) {
   const order = await OrderModel.findOne({ _id: orderId, userId }).exec();

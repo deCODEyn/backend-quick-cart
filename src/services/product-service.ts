@@ -1,3 +1,4 @@
+import type { Types } from 'mongoose';
 import {
   type ProductDocumentInterface,
   ProductModel,
@@ -32,7 +33,9 @@ export async function listProductsService(): Promise<
   return await ProductModel.find({}).exec();
 }
 
-export async function deleteProductService(productId: string): Promise<void> {
+export async function deleteProductService(
+  productId: Types.ObjectId
+): Promise<void> {
   const deletedProduct = await ProductModel.findByIdAndDelete(productId).exec();
   if (!deletedProduct) {
     throw new NotFoundError('Product not found.');
@@ -45,13 +48,13 @@ export async function deleteProductService(productId: string): Promise<void> {
 }
 
 export async function getProductService(
-  productId: string
+  productId: Types.ObjectId
 ): Promise<ProductDocumentInterface> {
   return await findProductOrThrow(productId);
 }
 
 export async function updateProductService(
-  productId: string,
+  productId: Types.ObjectId,
   updateData: UpdateProductBodyType
 ): Promise<ProductDocumentInterface> {
   const updatedProduct = await ProductModel.findByIdAndUpdate(

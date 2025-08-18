@@ -27,7 +27,7 @@ export async function listAddressesService(
 }
 
 export async function getAddressService(
-  addressId: string,
+  addressId: Types.ObjectId,
   userId: Types.ObjectId
 ): Promise<AddressDocumentInterface> {
   return await findAddressOrThrow(addressId, userId);
@@ -35,7 +35,7 @@ export async function getAddressService(
 
 export async function updateAddressService(
   userId: Types.ObjectId,
-  addressId: string,
+  addressId: Types.ObjectId,
   updateData: updateAddressBodyType
 ): Promise<AddressDocumentInterface> {
   const updatedAddress = await AddressModel.findOneAndUpdate(
@@ -58,7 +58,7 @@ export async function updateAddressService(
 
 export async function deleteAddressService(
   userId: Types.ObjectId,
-  addressId: string
+  addressId: Types.ObjectId
 ): Promise<void> {
   const deletedAddress = await AddressModel.findOneAndDelete({
     _id: addressId,

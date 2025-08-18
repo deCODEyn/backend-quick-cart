@@ -1,11 +1,12 @@
 import z from 'zod';
 import { addressSchema } from '../address-schema.ts';
+import { objectIdSchema } from '../utils.ts';
 
 export const createAddressBodySchema = addressSchema.omit({ userId: true });
 export type CreateAddressBodyType = z.infer<typeof createAddressBodySchema>;
 
 export const getAddressParamsSchema = z.object({
-  id: z.string().min(1, 'Address ID is required.'),
+  id: objectIdSchema,
 });
 export type GetAddressParamsType = z.infer<typeof getAddressParamsSchema>;
 

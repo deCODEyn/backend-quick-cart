@@ -36,6 +36,6 @@ export type UpdateOrderStatusBodyType = z.infer<
 >;
 
 export const getOrderParamsSchema = z.object({
-  id: z.string().min(1, 'Order ID is required.'),
+  id: objectIdSchema,
 });
 export type GetOrderParamsType = z.infer<typeof getOrderParamsSchema>;

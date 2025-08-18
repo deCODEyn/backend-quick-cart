@@ -7,7 +7,7 @@ export interface AddressDocumentInterface extends AddressType, Document {
   _id: Types.ObjectId;
 }
 export interface AddressModelInterface
-  extends Model<AddressDocumentInterface> { }
+  extends Model<AddressDocumentInterface> {}
 
 const addressDBSchema = new mongoose.Schema<
   AddressDocumentInterface,

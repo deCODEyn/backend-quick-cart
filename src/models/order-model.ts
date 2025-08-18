@@ -8,7 +8,7 @@ import type { OrderType } from '../schemas/order-schema.ts';
 export interface OrderDocumentInterface extends OrderType, Document {
   _id: Types.ObjectId;
 }
-export interface OrderModelInterface extends Model<OrderDocumentInterface> { }
+export interface OrderModelInterface extends Model<OrderDocumentInterface> {}
 
 const OrderDBSchema = new mongoose.Schema<
   OrderDocumentInterface,

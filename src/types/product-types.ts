@@ -1,7 +1,7 @@
 import type { Types } from 'mongoose';
 
-export interface ProductQueryItem {
-  id: string | Types.ObjectId;
+export interface ProductValidationItem {
+  id: Types.ObjectId;
   quantity: number;
   size: string;
 }

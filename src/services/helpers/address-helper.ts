@@ -4,7 +4,7 @@ import type { MinimizeAddressType } from '../../schemas/address-schema.ts';
 import { NotFoundError } from '../../utils/errors.ts';
 
 export async function findAddressOrThrow(
-  addressId: string | Types.ObjectId,
+  addressId: Types.ObjectId,
   userId: Types.ObjectId
 ) {
   const address = await AddressModel.findOne({ _id: addressId, userId }).exec();
