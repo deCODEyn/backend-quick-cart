@@ -33,6 +33,7 @@ export async function formatOrderItems(
           id: product._id,
           name: product.name,
           price: product.price,
+          image: product.image[0],
         },
         quantity: item.quantity,
         size: item.size,

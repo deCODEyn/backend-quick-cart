@@ -1,4 +1,3 @@
-
 import { env } from './env.ts';
 import { buildApp } from './plugins/app.ts';
 

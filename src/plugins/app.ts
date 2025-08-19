@@ -7,7 +7,6 @@ import {
 import { errorHandler } from '../utils/errors.ts';
 import { appPlugins } from './app-plugins.ts';
 
-
 export async function buildApp(): Promise<FastifyInstance> {
   const app = fastify({
     logger: { level: 'info' },

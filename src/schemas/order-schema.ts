@@ -10,6 +10,7 @@ export const orderProductSchema = z.object({
   id: objectIdSchema,
   name: z.string().min(1, 'Product name is required.'),
   price: z.number().positive('Price must be a positive number.'),
+  image: z.string().nonempty('Image is required'),
 });
 export type OrderProductType = z.infer<typeof orderProductSchema>;
 
@@ -29,6 +30,9 @@ export const orderSchema = z.object({
   items: z
     .array(orderItemSchema)
     .min(1, 'The order must contain at least one item.'),
+  deliveryFee: z
+    .number()
+    .nonnegative('Delivery fee must be a non-negative number.'),
   payment: z.boolean().optional(),
   paymentMethod: z.string().min(1, 'Payment method is required.'),
   status: z.enum(VALID_ORDER_STATUSES_ENUM).optional(),

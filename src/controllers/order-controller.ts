@@ -56,11 +56,11 @@ export async function updateOrder(
 ) {
   const userId = getUserId(request.user);
   const { id: orderId } = request.params as GetOrderParamsType;
-  const updateData = request.body as UpdateOrderBodyType;
+  const { address: addressId } = request.body as UpdateOrderBodyType;
 
   reply.status(200).send({
     message: 'Order updated successfully.',
-    result: await updateOrderService(userId, orderId, updateData),
+    result: await updateOrderService(userId, orderId, addressId),
     success: true,
   });
 }

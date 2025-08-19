@@ -5,7 +5,6 @@ import {
 } from '../models/order-model.ts';
 import type {
   CreateOrderBodyType,
-  UpdateOrderBodyType,
   UpdateOrderStatusBodyType,
 } from '../schemas/routes-schemas/order-route-schema.ts';
 import { BadRequestError, NotFoundError } from '../utils/errors.ts';
@@ -16,7 +15,7 @@ export async function createOrderService(
   userId: Types.ObjectId,
   orderData: CreateOrderBodyType
 ): Promise<OrderDocumentInterface> {
-  const { addressId, items, paymentMethod } = orderData;
+  const { addressId, items, paymentMethod, deliveryFee } = orderData;
 
   const orderAddress = await getAndMinimizeAddress(addressId, userId);
   const { orderItems, totalAmount } = await formatOrderItems(items);
@@ -25,6 +24,7 @@ export async function createOrderService(
     address: orderAddress,
     amount: totalAmount,
     items: orderItems,
+    deliveryFee,
     paymentMethod,
     userId,
   });
@@ -49,7 +49,7 @@ export async function getOrderService(
 export async function updateOrderService(
   userId: Types.ObjectId,
   orderId: Types.ObjectId,
-  updateData: UpdateOrderBodyType
+  adressId: Types.ObjectId
 ): Promise<OrderDocumentInterface> {
   const order = await findOrderOrThrow(orderId, userId);
   const allowedStatuses = ['Order Placed', 'Ready to ship'];
@@ -59,9 +59,10 @@ export async function updateOrderService(
     );
   }
 
+  const updateAddress = await getAndMinimizeAddress(adressId, userId)
   const updatedOrder = await OrderModel.findOneAndUpdate(
     { _id: orderId, userId },
-    updateData,
+    { $set: { address: updateAddress } },
     { new: true, runValidators: true }
   ).exec();
 

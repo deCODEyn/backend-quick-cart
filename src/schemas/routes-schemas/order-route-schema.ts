@@ -18,18 +18,20 @@ export const createOrderBodySchema = z.object({
   items: z
     .array(createOrderItemBodySchema)
     .min(1, 'The order must contain at least one item.'),
+  deliveryFee: z
+    .number()
+    .nonnegative('Delivery fee must be a non-negative number.'),
   paymentMethod: z.string().min(1, 'Payment method is required.'),
 });
 export type CreateOrderBodyType = z.infer<typeof createOrderBodySchema>;
 
 export const updateOrderBodySchema = z.object({
-  address: orderSchema.shape.address.optional(),
-  paymentMethod: orderSchema.shape.paymentMethod.optional(),
+  address: objectIdSchema
 });
 export type UpdateOrderBodyType = z.infer<typeof updateOrderBodySchema>;
 
-export const updateOrderStatusBodySchema = z.object({
-  status: orderSchema.shape.status,
+export const updateOrderStatusBodySchema = orderSchema.partial().pick({
+  status: true,
 });
 export type UpdateOrderStatusBodyType = z.infer<
   typeof updateOrderStatusBodySchema
