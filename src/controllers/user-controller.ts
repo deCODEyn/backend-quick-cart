@@ -29,7 +29,7 @@ export async function registerUser(
 
   const newUser = await createUser(userData);
   const token = signToken({
-    userId: newUser.id,
+    userId: newUser._id,
     email: newUser.email,
     role: newUser.role,
   });

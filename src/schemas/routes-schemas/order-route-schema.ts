@@ -26,7 +26,7 @@ export const createOrderBodySchema = z.object({
 export type CreateOrderBodyType = z.infer<typeof createOrderBodySchema>;
 
 export const updateOrderBodySchema = z.object({
-  address: objectIdSchema
+  address: objectIdSchema,
 });
 export type UpdateOrderBodyType = z.infer<typeof updateOrderBodySchema>;
 

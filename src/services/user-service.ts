@@ -10,10 +10,9 @@ export async function findUserByEmail(email: string) {
 export async function createUser(userData: UserType): Promise<UserPublicType> {
   const newUser = new userModel(userData);
   const savedUser = await newUser.save();
-
   const { _id, email, name, role } = savedUser;
 
-  return { id: _id.toString(), name, email, role };
+  return { _id, name, email, role };
 }
 
 export async function authenticateUser(
@@ -31,7 +30,7 @@ export async function authenticateUser(
   }
 
   const token = signToken({
-    userId: user._id.toString(),
+    userId: user._id,
     email: user.email,
     role: user.role,
   });

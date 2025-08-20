@@ -59,7 +59,7 @@ export async function updateOrderService(
     );
   }
 
-  const updateAddress = await getAndMinimizeAddress(adressId, userId)
+  const updateAddress = await getAndMinimizeAddress(adressId, userId);
   const updatedOrder = await OrderModel.findOneAndUpdate(
     { _id: orderId, userId },
     { $set: { address: updateAddress } },

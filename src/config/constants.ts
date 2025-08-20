@@ -24,3 +24,6 @@ export const VALID_ORDER_STATUSES_ENUM = [
 
 // Address
 export const POSTAL_CODE_REGEX = /^\d{5}-?\d{3}$/;
+
+//Variables
+export const NUMERIC_FIELDS = ['cpf', 'rg', 'phoneNumber', 'whatsApp'];

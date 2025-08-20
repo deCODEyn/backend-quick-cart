@@ -2,6 +2,7 @@ import type { Document, Model } from 'mongoose';
 import mongoose, { type Types } from 'mongoose';
 import { ADDRESS_TYPE_ENUM } from '../config/constants.ts';
 import type { AddressType } from '../schemas/address-schema.ts';
+import { cleanNumericString } from '../utils/cleaner.ts';
 
 export interface AddressDocumentInterface extends AddressType, Document {
   _id: Types.ObjectId;
@@ -36,6 +37,13 @@ const addressDBSchema = new mongoose.Schema<
   },
   { timestamps: true }
 );
+
+addressDBSchema.pre('save', function (next) {
+  if (this.isModified('zipCode') && this.zipCode) {
+    this.zipCode = cleanNumericString(this.zipCode);
+  }
+  next();
+});
 
 export const AddressModel =
   (mongoose.models.Address as AddressModelInterface) ||
