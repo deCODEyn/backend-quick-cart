@@ -1,7 +1,7 @@
 import z from 'zod';
 import { VALID_SIZES_ENUM } from '../../config/constants.ts';
 import { orderSchema } from '../order-schema.ts';
-import { objectIdSchema } from '../utils.ts';
+import { objectIdSchema } from '../zod-schema-utils.ts';
 
 export const createOrderItemBodySchema = z.object({
   id: objectIdSchema,

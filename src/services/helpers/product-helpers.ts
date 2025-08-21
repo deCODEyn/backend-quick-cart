@@ -3,7 +3,7 @@ import {
   type ProductDocumentInterface,
   ProductModel,
 } from '../../models/product-model.ts';
-import type { ValidSizeLiterals } from '../../schemas/utils.ts';
+import type { ValidSizeLiterals } from '../../schemas/zod-schema-utils.ts';
 import type { ProductValidationItem } from '../../types/product-types.ts';
 import { BadRequestError, NotFoundError } from '../../utils/errors.ts';
 

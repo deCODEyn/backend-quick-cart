@@ -4,7 +4,7 @@ import {
   VALID_SIZES_ENUM,
 } from '../config/constants.ts';
 import { minimizeAddressSchema } from './address-schema.ts';
-import { objectIdSchema } from './utils.ts';
+import { objectIdSchema } from './zod-schema-utils.ts';
 
 export const orderProductSchema = z.object({
   id: objectIdSchema,

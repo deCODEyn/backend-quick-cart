@@ -1,13 +1,18 @@
 import { z } from 'zod';
 import { ADDRESS_TYPE_ENUM, USER_ROLE_ENUM } from '../config/constants.ts';
-import { numericString, objectIdSchema } from './utils.ts';
+import {
+  cpfSchema,
+  numericString,
+  objectIdSchema,
+  rgSchema,
+} from './zod-schema-utils.ts';
 
 const socialMediaSchema = z.object({
   instagram: z.string().optional(),
   facebook: z.string().optional(),
   X: z.string().optional(),
   linkedIn: z.string().optional(),
-  whatsApp: numericString(),
+  whatsApp: numericString().optional(),
 });
 
 const addressSchema = z.object({
@@ -25,9 +30,9 @@ export const userSchema = z.object({
   firstName: z.string().optional(),
   middleName: z.string().optional(),
   lastName: z.string().optional(),
-  cpf: numericString(11),
-  rg: numericString(7),
-  phoneNumber: numericString(),
+  cpf: cpfSchema,
+  rg: rgSchema,
+  phoneNumber: numericString().optional(),
   socialMedia: socialMediaSchema.optional(),
   addresses: z.array(addressSchema).optional(),
 });

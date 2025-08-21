@@ -1,12 +1,7 @@
 import bcrypt from 'bcrypt';
 import mongoose, { type Document, type Model, type Types } from 'mongoose';
-import {
-  ADDRESS_TYPE_ENUM,
-  NUMERIC_FIELDS,
-  USER_ROLE_ENUM,
-} from '../config/constants.ts';
+import { ADDRESS_TYPE_ENUM, USER_ROLE_ENUM } from '../config/constants.ts';
 import type { UserType } from '../schemas/user-schema.ts';
-import { cleanNumericString } from '../utils/cleaner.ts';
 
 export interface UserDocumentInterface extends UserType, Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -57,20 +52,6 @@ userDBSchema.pre('save', async function (next) {
       this.password = await bcrypt.hash(this.password, salt);
     } catch (error) {
       next(error as Error);
-    }
-  }
-
-  for (const field of NUMERIC_FIELDS) {
-    if (this.socialMedia && Object.hasOwn(this.socialMedia, field)) {
-      const socialMediaPath = `socialMedia.${field}`;
-      if (this.isModified(socialMediaPath) && this.get(socialMediaPath)) {
-        this.set(
-          socialMediaPath,
-          cleanNumericString(this.get(socialMediaPath))
-        );
-      }
-    } else if (this.isModified(field) && this.get(field)) {
-      this.set(field, cleanNumericString(this.get(field)));
     }
   }
 

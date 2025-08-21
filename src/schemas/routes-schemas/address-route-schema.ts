@@ -1,6 +1,6 @@
 import z from 'zod';
 import { addressSchema } from '../address-schema.ts';
-import { objectIdSchema } from '../utils.ts';
+import { objectIdSchema } from '../zod-schema-utils.ts';
 
 export const createAddressBodySchema = addressSchema.omit({ userId: true });
 export type CreateAddressBodyType = z.infer<typeof createAddressBodySchema>;

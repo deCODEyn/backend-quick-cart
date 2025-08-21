@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { VALID_SIZES_ENUM } from '../config/constants.ts';
-import { objectIdSchema } from './utils.ts';
+import { objectIdSchema } from './zod-schema-utils.ts';
 
 export const cartItemBaseSchema = z.object({
   id: objectIdSchema,

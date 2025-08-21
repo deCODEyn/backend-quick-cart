@@ -1,7 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { AUTH_TOKEN_EXPIRATION_SECONDS } from '../config/constants.ts';
 import { env } from '../env.ts';
-import { type JWTPayload, jwtPayloadSchema } from '../schemas/utils.ts';
+import {
+  type JWTPayload,
+  jwtPayloadSchema,
+} from '../schemas/zod-schema-utils.ts';
 
 export function signToken(payload: JWTPayload): string {
   return jwt.sign(payload, env.JWT_SECRET, {

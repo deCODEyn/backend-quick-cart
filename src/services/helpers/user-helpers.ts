@@ -1,5 +1,6 @@
 import mongoose, { type Types } from 'mongoose';
 import type { JWTPayload } from '../../types/global-types.ts';
+import type { JWTPayload } from '../../schemas/zod-schema-utils.ts';
 import { NotFoundError } from '../../utils/errors.ts';
 
 export function getUserId(user: JWTPayload | undefined): Types.ObjectId {

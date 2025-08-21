@@ -1,6 +1,6 @@
 import z from 'zod';
 import { ADDRESS_TYPE_ENUM, POSTAL_CODE_REGEX } from '../config/constants.ts';
-import { objectIdSchema } from './utils.ts';
+import { objectIdSchema } from './zod-schema-utils.ts';
 
 export const addressSchema = z.object({
   city: z.string().nonempty('City is required.'),

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import z from 'zod';
 import { USER_ROLE_ENUM, VALID_SIZES_ENUM } from '../config/constants.ts';
+import { isCpfValid, isRgValid } from '../utils/validator.ts';
 
 export const objectIdSchema = z
   .string({
@@ -37,3 +38,21 @@ export const numericString = (minLength = 1) => {
     .min(minLength)
     .transform((val) => val.replace(/\D/g, ''));
 };
+
+export const cpfSchema = numericString(11)
+  .optional()
+  .refine(
+    (val) => {
+      return val ? isCpfValid(val) : true;
+    },
+    { message: 'Invalid CPF.' }
+  );
+
+export const rgSchema = numericString(7)
+  .optional()
+  .refine(
+    (val) => {
+      return val ? isRgValid(val) : true;
+    },
+    { message: 'Invalid RG.' }
+  );

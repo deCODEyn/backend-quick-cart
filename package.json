@@ -25,6 +25,7 @@
     "@fastify/multipart": "^9.0.3",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
+    "cpf-cnpj-validator": "^1.0.3",
     "fastify": "^5.4.0",
     "fastify-type-provider-zod": "^5.0.2",
     "jsonwebtoken": "^9.0.2",
