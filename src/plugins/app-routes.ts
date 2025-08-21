@@ -8,11 +8,11 @@ import { userRoutes } from '../routes/user-route.ts';
 export function appRoutes(app: FastifyInstance) {
   app.register(
     (routes) => {
-      routes.register(userRoutes);
-      routes.register(productRoutes);
-      routes.register(cartRoutes);
-      routes.register(addressRoutes);
-      routes.register(orderRoutes);
+      routes.register(userRoutes, { prefix: '/user' });
+      routes.register(productRoutes, { prefix: '/products' });
+      routes.register(cartRoutes, { prefix: '/cart' });
+      routes.register(addressRoutes, { prefix: '/address' });
+      routes.register(orderRoutes, { prefix: '/orders' });
     },
     { prefix: '/api' }
   );

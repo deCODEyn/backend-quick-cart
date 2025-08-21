@@ -7,37 +7,31 @@ import {
   uploadUserImage,
 } from '../controllers/user-controller.ts';
 import { preHandlerUserImage } from '../middleware/pre-handler-user-image.ts';
-import { renewToken } from '../middleware/renew-token.ts';
-import { validateAuth } from '../middleware/validate-auth.ts';
 import {
   loginBodySchema,
   registerBodySchema,
 } from '../schemas/routes-schemas/user-route-schema.ts';
+import { registerPrivateRoutes } from '../utils/route-decorators.ts';
 
 export function userRoutes(app: FastifyInstance) {
-  app.register((privateRoutes) => {
-    privateRoutes.addHook('preHandler', validateAuth);
-    privateRoutes.addHook('onSend', renewToken);
-
-    privateRoutes.get('/user/me', getMe);
+  registerPrivateRoutes(app, (privateRoutes) => {
+    privateRoutes.get('/me', getMe);
     privateRoutes.patch(
-      '/user/avatar-image',
+      '/avatar-image',
       { preHandler: [preHandlerUserImage] },
       uploadUserImage
     );
   });
 
-  app.register((publicRoutes) => {
-    publicRoutes.post(
-      '/user/register',
-      { schema: { body: registerBodySchema } },
-      registerUser
-    );
-    publicRoutes.post(
-      '/user/login',
-      { schema: { body: loginBodySchema } },
-      loginUser
-    );
-    publicRoutes.post('/user/logout', logoutUser);
-  });
+  app.post(
+    '/register',
+    { schema: { body: registerBodySchema } },
+    registerUser
+  );
+  app.post(
+    '/login',
+    { schema: { body: loginBodySchema } },
+    loginUser
+  );
+  app.post('/logout', logoutUser);
 }

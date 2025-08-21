@@ -5,29 +5,25 @@ import {
   getCartItems,
   updateCartItem,
 } from '../controllers/cart-controller.ts';
-import { renewToken } from '../middleware/renew-token.ts';
-import { validateAuth } from '../middleware/validate-auth.ts';
 import {
   deleteCartItemParamsSchema,
   postCartBodySchema,
 } from '../schemas/routes-schemas/cart-route-schema.ts';
+import { registerPrivateRoutes } from '../utils/route-decorators.ts';
 
 export function cartRoutes(app: FastifyInstance) {
-  app.register((publicRoutes) => {
-    publicRoutes.addHook('preHandler', validateAuth);
-    publicRoutes.addHook('onSend', renewToken);
-
-    publicRoutes.post(
-      '/cart',
+  registerPrivateRoutes(app, (privateRoutes) => {
+    privateRoutes.post(
+      '/',
       { schema: { body: postCartBodySchema } },
       updateCartItem
     );
-    publicRoutes.get('/cart', getCartItems);
-    publicRoutes.delete(
-      '/cart/:id/:size',
+    privateRoutes.get('/cart', getCartItems);
+    privateRoutes.delete(
+      '/:id/:size',
       { schema: { params: deleteCartItemParamsSchema } },
       deleteCartItem
     );
-    publicRoutes.delete('/cart', clearCart);
+    privateRoutes.delete('/', clearCart);
   });
 }

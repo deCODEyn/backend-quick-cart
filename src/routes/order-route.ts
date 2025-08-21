@@ -7,34 +7,29 @@ import {
   updateAllOrders,
   updateOrder,
 } from '../controllers/order-controller.ts';
-import { renewToken } from '../middleware/renew-token.ts';
-import { validateAdminAuth } from '../middleware/validate-admin-auth.ts';
-import { validateAuth } from '../middleware/validate-auth.ts';
 import {
   createOrderBodySchema,
   getOrderParamsSchema,
   updateOrderBodySchema,
   updateOrderStatusBodySchema,
 } from '../schemas/routes-schemas/order-route-schema.ts';
+import { registerAdminRoutes, registerPrivateRoutes } from '../utils/route-decorators.ts';
 
 export function orderRoutes(app: FastifyInstance) {
-  app.register((publicRoutes) => {
-    publicRoutes.addHook('preHandler', validateAuth);
-    publicRoutes.addHook('onSend', renewToken);
-
-    publicRoutes.post(
-      '/orders',
+  registerPrivateRoutes(app, (privateRoutes) => {
+    privateRoutes.post(
+      '/',
       { schema: { body: createOrderBodySchema } },
       createOrder
     );
-    publicRoutes.get('/orders', listOrders);
-    publicRoutes.get(
-      '/orders/:id',
+    privateRoutes.get('/orders', listOrders);
+    privateRoutes.get(
+      '/:id',
       { schema: { params: getOrderParamsSchema } },
       getOrder
     );
-    publicRoutes.patch(
-      '/orders/:id',
+    privateRoutes.patch(
+      '/:id',
       {
         schema: {
           params: getOrderParamsSchema,
@@ -45,14 +40,10 @@ export function orderRoutes(app: FastifyInstance) {
     );
   });
 
-  app.register((privateRoutes) => {
-    privateRoutes.addHook('preHandler', validateAuth);
-    privateRoutes.addHook('preHandler', validateAdminAuth);
-    privateRoutes.addHook('onSend', renewToken);
-
-    privateRoutes.get('/admin/orders', listAllOrders);
-    privateRoutes.patch(
-      '/admin/orders/:id/status',
+  registerAdminRoutes(app, (adminRoutes) => {
+    adminRoutes.get('/admin', listAllOrders);
+    adminRoutes.patch(
+      '/admin/:id/status',
       {
         schema: {
           params: getOrderParamsSchema,
