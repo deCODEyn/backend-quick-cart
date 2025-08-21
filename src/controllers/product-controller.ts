@@ -10,13 +10,13 @@ import {
   listProductsService,
   updateProductService,
 } from '../services/product-service.ts';
-import type { FastifyRequestBody } from '../types/global-types.ts';
+import type { FastifyCreateProductBody } from '../types/global-types.ts';
 
 export async function createProduct(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { productData, images } = request as FastifyRequestBody;
+  const { productData, images } = request as FastifyCreateProductBody;
   const result = await createProductService(productData, images);
 
   return reply.status(201).send({

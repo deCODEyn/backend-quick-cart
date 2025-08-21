@@ -1,11 +1,13 @@
+import type { Types } from 'mongoose';
 import { userModel } from '../models/user-model.ts';
 import type { UserPublicType, UserType } from '../schemas/user-schema.ts';
+import type { ProcessedFile } from '../types/global-types.ts';
 import { signToken } from '../utils/jwt.ts';
-
-export async function findUserByEmail(email: string) {
-  const user = await userModel.findOne({ email }).exec();
-  return user;
-}
+import {
+  deleteImagesFromCloudinary,
+  uploadImagesToCloudinary,
+} from './external-services/cloudinary-service.ts';
+import { findUserById } from './helpers/user-helpers.ts';
 
 export async function createUser(userData: UserType): Promise<UserPublicType> {
   const newUser = new userModel(userData);
@@ -23,12 +25,10 @@ export async function authenticateUser(
   if (!user) {
     return null;
   }
-
   const isMatch = await user.comparePassword(passwordFromRequest);
   if (!isMatch) {
     return null;
   }
-
   const token = signToken({
     userId: user._id,
     email: user.email,
@@ -36,4 +36,22 @@ export async function authenticateUser(
   });
 
   return token;
+}
+
+export async function uploadUserImageService(
+  userId: Types.ObjectId,
+  profileImage: ProcessedFile
+): Promise<string> {
+  const user = await findUserById(userId);
+  if (user.profileImage) {
+    await deleteImagesFromCloudinary([user.profileImage]);
+  }
+  const [newImageUrl] = await uploadImagesToCloudinary(
+    [profileImage],
+    'user-profile'
+  );
+  user.profileImage = newImageUrl;
+  await user.save();
+
+  return newImageUrl;
 }

@@ -1,52 +1,18 @@
-import type {
-  Multipart,
-  MultipartFile,
-  MultipartValue,
-} from '@fastify/multipart';
+import type { Multipart } from '@fastify/multipart';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { createProductBodySchema } from '../schemas/routes-schemas/product-route-schema.ts';
 import type {
-  FastifyRequestBody,
+  FastifyCreateProductBody,
   ProcessedFile,
 } from '../types/global-types.ts';
+import { BadRequestError } from '../utils/errors.ts';
 import {
   validateImageMaximumCount,
   validateImageMinimumCount,
-  validateImageSize,
 } from '../utils/upload-validator.ts';
+import { handleFieldPart, handleFilePart } from './pre-handler-helper.ts';
 
-async function handleFilePart(part: MultipartFile): Promise<ProcessedFile> {
-  const buffer = await validateImageSize(part);
-  return {
-    type: part.type as 'file',
-    fieldname: part.fieldname,
-    filename: part.filename,
-    encoding: part.encoding,
-    mimetype: part.mimetype,
-    buffer,
-  };
-}
-
-function handleFieldPart(
-  part: MultipartValue,
-  rawBody: Record<string, string | string[]>
-) {
-  if (rawBody[part.fieldname]) {
-    if (Array.isArray(rawBody[part.fieldname])) {
-      (rawBody[part.fieldname] as string[]).push(part.value as string);
-    } else {
-      rawBody[part.fieldname] = [
-        rawBody[part.fieldname] as string,
-
-        part.value as string,
-      ];
-    }
-  } else {
-    rawBody[part.fieldname] = part.value as string;
-  }
-}
-
-async function parseMultipartFieldsAndFiles(request: FastifyRequestBody) {
+async function parseMultipartFieldsAndFiles(request: FastifyCreateProductBody) {
   const rawBody: Record<string, string | string[]> = {};
   const imagePromises: Promise<ProcessedFile>[] = [];
 
@@ -84,11 +50,15 @@ function convertAndValidateFields(rawBody: Record<string, string | string[]>) {
   return createProductBodySchema.parse(bodyToValidate);
 }
 
-export async function preHandlerProduct(
+export async function preHandlerCreateProduct(
   request: FastifyRequest,
   _reply: FastifyReply
 ): Promise<void> {
-  const customRequest = request as FastifyRequestBody;
+  if (!request.isMultipart()) {
+    throw new BadRequestError('Request must be multipart/form-data.');
+  }
+
+  const customRequest = request as FastifyCreateProductBody;
   const { rawBody, images } = await parseMultipartFieldsAndFiles(customRequest);
   const validatedData = convertAndValidateFields(rawBody);
 

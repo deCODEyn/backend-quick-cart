@@ -3,7 +3,8 @@ import type { ProcessedFile } from '../../types/global-types.ts';
 import { CloudinaryError, DataIntegrityError } from '../../utils/errors.ts';
 
 export async function uploadImagesToCloudinary(
-  images: ProcessedFile[]
+  images: ProcessedFile[],
+  folder: string
 ): Promise<string[]> {
   const imageUrls = await Promise.all(
     images.map(async (image) => {
@@ -12,11 +13,15 @@ export async function uploadImagesToCloudinary(
       const dataUri = `data:${image.mimetype};base64,${base64}`;
 
       const result = await cloudinary.uploader.upload(dataUri, {
-        folder: 'products',
+        folder,
       });
       return result.secure_url;
     })
   );
+  if (!imageUrls) {
+    throw new CloudinaryError('Failed to upload image to Cloudinary.');
+  }
+
   return imageUrls;
 }
 

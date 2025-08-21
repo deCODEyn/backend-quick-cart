@@ -35,6 +35,7 @@ export const userSchema = z.object({
   phoneNumber: numericString().optional(),
   socialMedia: socialMediaSchema.optional(),
   addresses: z.array(addressSchema).optional(),
+  profileImage: z.string().optional(),
 });
 export type UserType = z.infer<typeof userSchema>;
 

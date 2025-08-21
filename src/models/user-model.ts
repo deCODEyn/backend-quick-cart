@@ -41,6 +41,7 @@ const userDBSchema = new mongoose.Schema<
         type: { type: String, enum: ADDRESS_TYPE_ENUM },
       },
     ],
+    profileImage: { type: String },
   },
   { timestamps: true }
 );

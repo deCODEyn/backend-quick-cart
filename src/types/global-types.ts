@@ -2,9 +2,13 @@ import type { FastifyRequest } from 'fastify';
 import type { CartDocumentInterface } from '../models/cart-model.ts';
 import type { CreateProductBodyType } from '../schemas/routes-schemas/product-route-schema.ts';
 
-export interface FastifyRequestBody extends FastifyRequest {
+export interface FastifyCreateProductBody extends FastifyRequest {
   productData: CreateProductBodyType;
   images: ProcessedFile[];
+}
+
+export interface FastifyUserImageBody extends FastifyRequest {
+  profileImage: ProcessedFile;
 }
 
 export type ProcessedFile = {

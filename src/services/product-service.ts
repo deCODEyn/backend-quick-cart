@@ -19,7 +19,7 @@ export async function createProductService(
   productData: CreateProductBodyType,
   images: ProcessedFile[]
 ): Promise<ProductDocumentInterface> {
-  const imageUrls = await uploadImagesToCloudinary(images);
+  const imageUrls = await uploadImagesToCloudinary(images, 'products');
 
   const newProduct = new ProductModel({ ...productData, image: imageUrls });
   const savedProduct = await newProduct.save();
