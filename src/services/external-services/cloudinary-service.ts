@@ -11,7 +11,6 @@ export async function uploadImagesToCloudinary(
       const buffer = image.buffer;
       const base64 = buffer.toString('base64');
       const dataUri = `data:${image.mimetype};base64,${base64}`;
-
       const result = await cloudinary.uploader.upload(dataUri, {
         folder,
       });
@@ -31,14 +30,12 @@ export async function deleteImagesFromCloudinary(imageUrls: string[]) {
       const parts = url.split('/');
       const filenameWithExtension = parts.at(-1);
       const folder = parts.at(-2);
-
       if (!(filenameWithExtension && folder)) {
         throw new Error(`Invalid Cloudinary URL format for URL: ${url}`);
       }
       const filename = filenameWithExtension.split('.')[0];
       return `${folder}/${filename}`;
     });
-
     await Promise.all(
       publicIds.map((publicId) => cloudinary.uploader.destroy(publicId))
     );

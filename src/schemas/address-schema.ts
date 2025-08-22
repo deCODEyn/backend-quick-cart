@@ -18,7 +18,6 @@ export const addressSchema = z.object({
     .nonempty('Zip code is required.')
     .regex(POSTAL_CODE_REGEX, 'Invalid zip code format.'),
 });
-
 export type AddressType = z.infer<typeof addressSchema>;
 
 export const minimizeAddressSchema = addressSchema

@@ -11,7 +11,6 @@ export function validateAuth(
   if (!token) {
     throw new UnauthorizedError('Token not provided.');
   }
-
   const payload = verifyAndValidateToken(token);
   if (!payload) {
     throw new UnauthorizedError('Invalid or expired token.');

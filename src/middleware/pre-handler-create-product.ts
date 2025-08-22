@@ -15,7 +15,6 @@ import { handleFieldPart, handleFilePart } from './pre-handler-helper.ts';
 async function parseMultipartFieldsAndFiles(request: FastifyCreateProductBody) {
   const rawBody: Record<string, string | string[]> = {};
   const imagePromises: Promise<ProcessedFile>[] = [];
-
   for await (const part of request.parts() as AsyncIterableIterator<Multipart>) {
     if (part.type === 'file') {
       validateImageMaximumCount(imagePromises.length);
@@ -32,10 +31,8 @@ async function parseMultipartFieldsAndFiles(request: FastifyCreateProductBody) {
 
 function convertAndValidateFields(rawBody: Record<string, string | string[]>) {
   const bodyToValidate: Record<string, unknown> = {};
-
   for (const key of Object.keys(rawBody)) {
     const value = rawBody[key as keyof typeof rawBody];
-
     if (key === 'price' && typeof value === 'string') {
       bodyToValidate[key] = Number(value);
     } else if (key === 'bestseller' && typeof value === 'string') {
@@ -57,7 +54,6 @@ export async function preHandlerCreateProduct(
   if (!request.isMultipart()) {
     throw new BadRequestError('Request must be multipart/form-data.');
   }
-
   const customRequest = request as FastifyCreateProductBody;
   const { rawBody, images } = await parseMultipartFieldsAndFiles(customRequest);
   const validatedData = convertAndValidateFields(rawBody);

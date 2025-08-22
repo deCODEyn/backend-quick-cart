@@ -32,12 +32,12 @@ export type JWTPayload = z.infer<typeof jwtPayloadSchema>;
 export const sizeEnumSchema = z.enum(VALID_SIZES_ENUM);
 export type ValidSizeLiterals = z.infer<typeof sizeEnumSchema>;
 
-export const numericString = (minLength = 1) => {
+export function numericString(minLength = 1) {
   return z
     .string()
     .min(minLength)
     .transform((val) => val.replace(/\D/g, ''));
-};
+}
 
 export const cpfSchema = numericString(11)
   .optional()

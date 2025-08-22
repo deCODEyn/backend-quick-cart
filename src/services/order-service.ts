@@ -16,10 +16,8 @@ export async function createOrderService(
   orderData: CreateOrderBodyType
 ): Promise<OrderDocumentInterface> {
   const { addressId, items, paymentMethod, deliveryFee } = orderData;
-
   const orderAddress = await getAndMinimizeAddress(addressId, userId);
   const { orderItems, totalAmount } = await formatOrderItems(items);
-
   const newOrder = new OrderModel({
     address: orderAddress,
     amount: totalAmount,
@@ -58,7 +56,6 @@ export async function updateOrderService(
       `Cannot update order with status '${order.status}'. Only orders with status 'Order Placed' or 'Ready to ship' can be updated.`
     );
   }
-
   const updateAddress = await getAndMinimizeAddress(adressId, userId);
   const updatedOrder = await OrderModel.findOneAndUpdate(
     { _id: orderId, userId },
@@ -84,7 +81,6 @@ export async function updateAllOrdersService(
     updateData,
     { new: true, runValidators: true }
   ).exec();
-
   if (!updatedOrder) {
     throw new NotFoundError('Order not found.');
   }

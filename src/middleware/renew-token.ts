@@ -17,7 +17,6 @@ export function renewToken(
         'Token expiration time not found or user not authenticated.'
       );
     }
-
     const nowInSeconds = Math.floor(Date.now() / 1000);
     const expiresInSeconds = tokenPayload.exp - nowInSeconds;
     if (expiresInSeconds < RENEW_WINDOW_MINUTES * 60) {

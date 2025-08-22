@@ -76,7 +76,6 @@ export const errorHandler = (
       success: false,
     });
   }
-
   if (error.validation) {
     const errors = error.validation.map((validationError) => {
       return {
@@ -91,15 +90,14 @@ export const errorHandler = (
       success: false,
     });
   }
-
   if (error instanceof AppError) {
     return reply.status(error.statusCode).send({
       message: error.message,
       success: false,
     });
   }
-
   reply.log.error(error);
+
   return reply.status(500).send({
     message: 'Internal server error.',
     error,

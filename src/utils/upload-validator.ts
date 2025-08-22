@@ -23,5 +23,6 @@ export async function validateImageSize(part: MultipartFile): Promise<Buffer> {
       `The maximum size per image is ${MAX_FILE_SIZE / (1024 * 1024)}MB.`
     );
   }
+
   return buffer;
 }

@@ -21,10 +21,8 @@ export async function formatOrderItems(
 ): Promise<{ orderItems: OrderItemType[]; totalAmount: number }> {
   const products = await findAndValidateProducts(items);
   const itemMap = new Map(items.map((item) => [item.id.toString(), item]));
-
   const orderItems: OrderItemType[] = [];
   let totalAmount = 0;
-
   for (const product of products) {
     const item = itemMap.get(product._id.toString());
     if (item) {

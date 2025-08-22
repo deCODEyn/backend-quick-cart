@@ -13,7 +13,10 @@ import {
   updateOrderBodySchema,
   updateOrderStatusBodySchema,
 } from '../schemas/routes-schemas/order-route-schema.ts';
-import { registerAdminRoutes, registerPrivateRoutes } from '../utils/route-decorators.ts';
+import {
+  registerAdminRoutes,
+  registerPrivateRoutes,
+} from '../utils/route-decorators.ts';
 
 export function orderRoutes(app: FastifyInstance) {
   registerPrivateRoutes(app, (privateRoutes) => {
@@ -22,7 +25,7 @@ export function orderRoutes(app: FastifyInstance) {
       { schema: { body: createOrderBodySchema } },
       createOrder
     );
-    privateRoutes.get('/orders', listOrders);
+    privateRoutes.get('/', listOrders);
     privateRoutes.get(
       '/:id',
       { schema: { params: getOrderParamsSchema } },

@@ -65,6 +65,7 @@ userDBSchema.methods.comparePassword = async function (
   if (!this.password) {
     return false;
   }
+
   return await bcrypt.compare(candidatePassword, this.password);
 };
 

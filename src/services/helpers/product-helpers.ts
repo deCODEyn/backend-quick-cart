@@ -12,6 +12,7 @@ export async function findProductOrThrow(productId: Types.ObjectId) {
   if (!product) {
     throw new NotFoundError('Product not found.');
   }
+
   return product;
 }
 
@@ -34,7 +35,6 @@ export async function findAndValidateProducts(
       );
     }
   }
-
   if (errors.length > 0) {
     throw new BadRequestError(errors.join(', '));
   }

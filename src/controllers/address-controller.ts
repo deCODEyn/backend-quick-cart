@@ -58,7 +58,7 @@ export async function updateAddress(
   const { id: addressId } = request.params as GetAddressParamsType;
   const updateData = request.body as updateAddressBodyType;
 
-  reply.status(200).send({
+  return reply.status(200).send({
     message: 'Address updated successfully.',
     result: await updateAddressService(userId, addressId, updateData),
     success: true,
@@ -73,7 +73,7 @@ export async function deleteAddress(
   const { id: addressId } = request.params as GetAddressParamsType;
   await deleteAddressService(userId, addressId);
 
-  reply.status(200).send({
+  return reply.status(200).send({
     message: 'Address deleted successfully.',
     success: true,
   });

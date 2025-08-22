@@ -13,7 +13,6 @@ export async function preHandlerUserImage(
   if (!request.isMultipart()) {
     throw new BadRequestError('Request must be multipart/form-data.');
   }
-
   const customRequest = request as FastifyUserImageBody;
   const parts = customRequest.parts();
   let file: ProcessedFile | undefined;

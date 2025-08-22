@@ -23,15 +23,7 @@ export function userRoutes(app: FastifyInstance) {
     );
   });
 
-  app.post(
-    '/register',
-    { schema: { body: registerBodySchema } },
-    registerUser
-  );
-  app.post(
-    '/login',
-    { schema: { body: loginBodySchema } },
-    loginUser
-  );
+  app.post('/register', { schema: { body: registerBodySchema } }, registerUser);
+  app.post('/login', { schema: { body: loginBodySchema } }, loginUser);
   app.post('/logout', logoutUser);
 }

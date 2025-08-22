@@ -15,11 +15,7 @@ import { registerAdminRoutes } from '../utils/route-decorators.ts';
 
 export function productRoutes(app: FastifyInstance) {
   app.get('/', listProducts);
-  app.get(
-    '/:id',
-    { schema: { params: getProductParamsSchema } },
-    getProduct
-  );
+  app.get('/:id', { schema: { params: getProductParamsSchema } }, getProduct);
 
   registerAdminRoutes(app, (adminRoutes) => {
     adminRoutes.post(

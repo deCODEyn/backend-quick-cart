@@ -26,7 +26,7 @@ export function appPlugins(app: FastifyInstance) {
 
   // -- 3. REGISTRO DE PLUGINS DE DOCUMENTAÇÃO --
 
-  // -- 4. REGISTRO DE SERVIÇOS/CONEXÕES --
+  // -- 4. REGISTRO DE SERVIÇOS E CONEXÕES --
   app.register(dbPlugin);
   app.register(cloudinaryPlugin);
 

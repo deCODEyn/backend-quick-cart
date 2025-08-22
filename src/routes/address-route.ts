@@ -20,7 +20,7 @@ export function addressRoutes(app: FastifyInstance) {
       { schema: { body: createAddressBodySchema } },
       createAddress
     );
-    privateRoutes.get('/address', listAddresses);
+    privateRoutes.get('/', listAddresses);
     privateRoutes.get(
       '/:id',
       { schema: { params: getAddressParamsSchema } },

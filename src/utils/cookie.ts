@@ -2,7 +2,7 @@ import type { FastifyReply } from 'fastify';
 import { AUTH_TOKEN_EXPIRATION_SECONDS } from '../config/constants.ts';
 
 export function setAuthCookie(reply: FastifyReply, token: string) {
-  reply.setCookie('auth-token', token, {
+  return reply.setCookie('auth-token', token, {
     path: '/',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -11,5 +11,5 @@ export function setAuthCookie(reply: FastifyReply, token: string) {
 }
 
 export function clearAuthCookie(reply: FastifyReply) {
-  reply.clearCookie('auth-token');
+  return reply.clearCookie('auth-token');
 }

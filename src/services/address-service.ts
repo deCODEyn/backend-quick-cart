@@ -9,6 +9,7 @@ import type {
 } from '../schemas/routes-schemas/address-route-schema.ts';
 import { NotFoundError } from '../utils/errors.ts';
 import { findAddressOrThrow } from './helpers/address-helper.ts';
+import { findUserById } from './helpers/user-helpers.ts';
 
 export async function createAddressService(
   userId: Types.ObjectId,
@@ -16,6 +17,9 @@ export async function createAddressService(
 ): Promise<AddressDocumentInterface> {
   const newAddress = new AddressModel({ userId, ...body });
   await newAddress.save();
+  const user = await findUserById(userId);
+  user.addresses?.push({ _id: newAddress._id, type: newAddress.type });
+  await user.save();
 
   return newAddress;
 }
@@ -39,15 +43,9 @@ export async function updateAddressService(
   updateData: updateAddressBodyType
 ): Promise<AddressDocumentInterface> {
   const updatedAddress = await AddressModel.findOneAndUpdate(
-    {
-      userId,
-      _id: addressId,
-    },
+    { userId, _id: addressId },
     updateData,
-    {
-      new: true,
-      runValidators: true,
-    }
+    { new: true, runValidators: true }
   ).exec();
   if (!updatedAddress) {
     throw new NotFoundError('Address not found.');
@@ -69,6 +67,11 @@ export async function deleteAddressService(
       'Address not found or does not belong to the user.'
     );
   }
+  const user = await findUserById(userId);
+  user.addresses = user.addresses?.filter(
+    (addressRef) => !addressRef._id.equals(addressId)
+  );
+  await user.save();
 
   return;
 }

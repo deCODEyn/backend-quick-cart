@@ -42,6 +42,7 @@ addressDBSchema.pre('save', function (next) {
   if (this.isModified('zipCode') && this.zipCode) {
     this.zipCode = cleanNumericString(this.zipCode);
   }
+
   next();
 });
 

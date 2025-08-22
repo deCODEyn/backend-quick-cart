@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose';
 import { type CartDocumentInterface, CartModel } from '../models/cart-model.ts';
-import type { UpdateCartItemResult } from '../types/global-types.ts';
+import type { UpdateCartItemResult } from '../types/cart-types.ts';
 
 export async function clearCartService(
   userId: Types.ObjectId
@@ -21,6 +21,7 @@ export async function removeCartItemService(
   if (updatedCart?.items.length === 0) {
     return await clearCartService(userId);
   }
+
   return updatedCart;
 }
 
@@ -32,14 +33,10 @@ export async function updateExistingCartItemService(
 ): Promise<CartDocumentInterface | null> {
   const updatedCart = await CartModel.findOneAndUpdate(
     { userId },
-    {
-      $set: { 'items.$[elem].quantity': quantity },
-    },
-    {
-      new: true,
-      arrayFilters: [{ 'elem.id': itemId, 'elem.size': size }],
-    }
+    { $set: { 'items.$[elem].quantity': quantity } },
+    { new: true, arrayFilters: [{ 'elem.id': itemId, 'elem.size': size }] }
   ).exec();
+
   return updatedCart;
 }
 
@@ -54,6 +51,7 @@ export async function addNewCartItemService(
     { $push: { items: { id: itemId, size, quantity } } },
     { new: true, upsert: true }
   ).exec();
+
   return newCart;
 }
 
@@ -69,7 +67,6 @@ export async function updateCartItemService(
       action: 'removed',
     };
   }
-
   const updatedCart = await updateExistingCartItemService(
     userId,
     itemId,

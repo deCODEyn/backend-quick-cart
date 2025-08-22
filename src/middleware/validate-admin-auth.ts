@@ -10,5 +10,6 @@ export function validateAdminAuth(
   if (user?.role !== 'Admin') {
     throw new UnauthorizedError('Access denied: Insufficient privileges.');
   }
+
   done();
 }

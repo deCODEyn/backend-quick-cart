@@ -7,7 +7,6 @@ export async function connectDB(app: FastifyInstance) {
     mongoose.connection.on('connected', () => {
       app.log.info('DB Connected');
     });
-
     await mongoose.connect(`${env.MONGODB_URI}/quickcart`);
   } catch (error) {
     app.log.error(error, 'DB connect error');

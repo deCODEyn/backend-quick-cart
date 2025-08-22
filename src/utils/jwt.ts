@@ -16,6 +16,7 @@ export function verifyAndValidateToken(token: string): JWTPayload | null {
   try {
     const decoded = jwt.verify(token, env.JWT_SECRET);
     const validatedPayload = jwtPayloadSchema.parse(decoded);
+
     return validatedPayload;
   } catch {
     return null;

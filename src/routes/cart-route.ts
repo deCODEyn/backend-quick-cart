@@ -18,7 +18,7 @@ export function cartRoutes(app: FastifyInstance) {
       { schema: { body: postCartBodySchema } },
       updateCartItem
     );
-    privateRoutes.get('/cart', getCartItems);
+    privateRoutes.get('/', getCartItems);
     privateRoutes.delete(
       '/:id/:size',
       { schema: { params: deleteCartItemParamsSchema } },

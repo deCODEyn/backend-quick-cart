@@ -8,7 +8,7 @@ import { userRoutes } from '../routes/user-route.ts';
 export function appRoutes(app: FastifyInstance) {
   app.register(
     (routes) => {
-      routes.register(userRoutes, { prefix: '/user' });
+      routes.register(userRoutes, { prefix: '/users' });
       routes.register(productRoutes, { prefix: '/products' });
       routes.register(cartRoutes, { prefix: '/cart' });
       routes.register(addressRoutes, { prefix: '/address' });

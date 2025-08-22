@@ -11,6 +11,7 @@ export async function findAddressOrThrow(
   if (!address) {
     throw new NotFoundError('Address not found.');
   }
+
   return address;
 }
 

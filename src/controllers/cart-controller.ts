@@ -17,14 +17,12 @@ export async function updateCartItem(
 ) {
   const userId = getUserId(request.user);
   const { id: itemId, quantity, size } = request.body as PostCartBodyType;
-
   const { cart, action } = await updateCartItemService(
     userId,
     itemId,
     size,
     quantity
   );
-
   let message = '';
   let status = 200;
   switch (action) {
@@ -68,7 +66,6 @@ export async function deleteCartItem(
 ) {
   const userId = getUserId(request.user);
   const { id: itemId, size } = request.params as DeleteCartItemParamsType;
-
   const cart = await removeCartItemService(userId, itemId, size);
 
   return reply.status(200).send({
