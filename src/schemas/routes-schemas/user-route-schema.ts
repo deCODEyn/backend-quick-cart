@@ -23,3 +23,13 @@ export const loginBodySchema = userSchema
       .max(100, { message: 'Password cannot exceed 100 characters.' }),
   });
 export type LoginBodyType = z.infer<typeof loginBodySchema>;
+
+export const updateUserProfileSchema = userSchema.omit({
+  email: true,
+  name: true,
+  password: true,
+  role: true,
+  addresses: true,
+  profileImage: true,
+});
+export type updateUserProfileType = z.infer<typeof updateUserProfileSchema>;

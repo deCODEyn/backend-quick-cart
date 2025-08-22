@@ -1,7 +1,8 @@
 import type { Types } from 'mongoose';
-import { userModel } from '../models/user-model.ts';
-import type { UserPublicType, UserType } from '../schemas/user-schema.ts';
+import { type UserDocumentInterface, userModel } from '../models/user-model.ts';
+import type { updateUserProfileType } from '../schemas/routes-schemas/user-route-schema.ts';
 import type { ProcessedFile } from '../types/global-types.ts';
+import { NotFoundError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
 import {
   deleteImagesFromCloudinary,
@@ -55,3 +56,19 @@ export async function uploadUserImageService(
 
   return newImageUrl;
 }
+export async function updateUserProfileService(
+  userId: Types.ObjectId,
+  updateData: updateUserProfileType
+): Promise<UserDocumentInterface> {
+  const updatedUser = await userModel.findOneAndUpdate(
+    { _id: userId },
+    { $set: updateData },
+    { new: true, runValidators: true }
+  );
+  if (!updatedUser) {
+    throw new NotFoundError('User not found.');
+  }
+
+  return updatedUser;
+}
+

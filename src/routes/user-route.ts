@@ -4,12 +4,14 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  updateUserProfile,
   uploadUserImage,
 } from '../controllers/user-controller.ts';
 import { preHandlerUserImage } from '../middleware/pre-handler-user-image.ts';
 import {
   loginBodySchema,
   registerBodySchema,
+  updateUserProfileSchema,
 } from '../schemas/routes-schemas/user-route-schema.ts';
 import { registerPrivateRoutes } from '../utils/route-decorators.ts';
 
@@ -20,6 +22,11 @@ export function userRoutes(app: FastifyInstance) {
       '/avatar-image',
       { preHandler: [preHandlerUserImage] },
       uploadUserImage
+    );
+    privateRoutes.patch(
+      '/profile',
+      { schema: { body: updateUserProfileSchema } },
+      updateUserProfile
     );
   });
 

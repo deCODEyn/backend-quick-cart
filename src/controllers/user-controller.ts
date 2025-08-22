@@ -2,6 +2,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import type {
   LoginBodyType,
   RegisterBodyType,
+  updateUserProfileType,
 } from '../schemas/routes-schemas/user-route-schema.ts';
 import {
   findUserByEmail,
@@ -10,6 +11,7 @@ import {
 import {
   authenticateUser,
   createUser,
+  updateUserProfileService,
   uploadUserImageService,
 } from '../services/user-service.ts';
 import type { FastifyUserImageBody } from '../types/global-types.ts';
@@ -88,6 +90,20 @@ export async function uploadUserImage(
 
   return reply.status(200).send({
     message: 'Profile image uploaded successfully.',
+    success: true,
+  });
+}
+
+export async function updateUserProfile(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const userId = getUserId(request.user);
+  const updateData = request.body as updateUserProfileType;
+
+  return reply.status(200).send({
+    message: 'Updated profile successfully',
+    result: await updateUserProfileService(userId, updateData),
     success: true,
   });
 }
