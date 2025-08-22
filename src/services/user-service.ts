@@ -1,6 +1,11 @@
 import type { Types } from 'mongoose';
 import { type UserDocumentInterface, userModel } from '../models/user-model.ts';
 import type { updateUserProfileType } from '../schemas/routes-schemas/user-route-schema.ts';
+import {
+  type UserPublicType,
+  type UserType,
+  userPublicSchema,
+} from '../schemas/user-schema.ts';
 import type { ProcessedFile } from '../types/global-types.ts';
 import { NotFoundError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
@@ -72,3 +77,11 @@ export async function updateUserProfileService(
   return updatedUser;
 }
 
+export async function getAuthenticatedUserService(
+  userId: Types.ObjectId
+): Promise<UserPublicType> {
+  const user = await findUserById(userId);
+  const publicUser = userPublicSchema.parse(user.toObject());
+
+  return publicUser;
+}

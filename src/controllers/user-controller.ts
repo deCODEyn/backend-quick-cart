@@ -11,6 +11,7 @@ import {
 import {
   authenticateUser,
   createUser,
+  getAuthenticatedUserService,
   updateUserProfileService,
   uploadUserImageService,
 } from '../services/user-service.ts';
@@ -58,15 +59,15 @@ export async function loginUser(request: FastifyRequest, reply: FastifyReply) {
   });
 }
 
-export function getMe(request: FastifyRequest, reply: FastifyReply) {
-  if (!request.user) {
+export async function getMe(request: FastifyRequest, reply: FastifyReply) {
+  if (!request.user?.userId) {
     throw new UnauthorizedError('User is not logged in.');
   }
-  const user = request.user;
+  const user = await getAuthenticatedUserService(getUserId(request.user));
 
   return reply.status(200).send({
     message: 'User profile fetched successfully.',
-    result: { email: user.email, role: user.role },
+    result: user,
     success: true,
   });
 }

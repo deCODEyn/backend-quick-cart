@@ -40,10 +40,9 @@ export const userSchema = z.object({
 export type UserType = z.infer<typeof userSchema>;
 
 export const userPublicSchema = userSchema
-  .pick({
-    name: true,
-    email: true,
-    role: true,
+  .omit({
+    password: true,
+    addresses: true,
   })
   .extend({
     _id: objectIdSchema,
