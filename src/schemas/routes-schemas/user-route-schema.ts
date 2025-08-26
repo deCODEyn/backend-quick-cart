@@ -25,11 +25,12 @@ export const loginBodySchema = userSchema
 export type LoginBodyType = z.infer<typeof loginBodySchema>;
 
 export const updateUserProfileSchema = userSchema.omit({
-  email: true,
   name: true,
   password: true,
   role: true,
   addresses: true,
   profileImage: true,
+}).extend({
+  currentPassword: z.string().min(1, 'A senha atual é obrigatória.'),
 });
 export type updateUserProfileType = z.infer<typeof updateUserProfileSchema>;

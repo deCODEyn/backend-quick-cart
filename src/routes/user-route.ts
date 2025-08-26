@@ -19,7 +19,7 @@ export function userRoutes(app: FastifyInstance) {
   registerPrivateRoutes(app, (privateRoutes) => {
     privateRoutes.get('/me', getMe);
     privateRoutes.patch(
-      '/avatar-image',
+      '/profile-image',
       { preHandler: [preHandlerUserImage] },
       uploadUserImage
     );

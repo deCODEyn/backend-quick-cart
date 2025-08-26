@@ -31,7 +31,7 @@ export async function deleteImagesFromCloudinary(imageUrls: string[]) {
       const filenameWithExtension = parts.at(-1);
       const folder = parts.at(-2);
       if (!(filenameWithExtension && folder)) {
-        throw new Error(`Invalid Cloudinary URL format for URL: ${url}`);
+        throw new Error(`Invalid Cloudinary URL format for URL: ${url}.`);
       }
       const filename = filenameWithExtension.split('.')[0];
       return `${folder}/${filename}`;

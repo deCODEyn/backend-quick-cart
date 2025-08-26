@@ -7,7 +7,7 @@ import {
   userPublicSchema,
 } from '../schemas/user-schema.ts';
 import type { ProcessedFile } from '../types/global-types.ts';
-import { NotFoundError } from '../utils/errors.ts';
+import { NotFoundError, UnauthorizedError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
 import {
   deleteImagesFromCloudinary,
@@ -65,9 +65,15 @@ export async function updateUserProfileService(
   userId: Types.ObjectId,
   updateData: updateUserProfileType
 ): Promise<UserDocumentInterface> {
+  const user = await findUserById(userId);
+  const { currentPassword, ...dataToUpdate } = updateData;
+  const isMatch = await user.comparePassword(currentPassword);
+  if (!isMatch) {
+    throw new UnauthorizedError('Incorrect password.');
+  }
   const updatedUser = await userModel.findOneAndUpdate(
     { _id: userId },
-    { $set: updateData },
+    { $set: dataToUpdate },
     { new: true, runValidators: true }
   );
   if (!updatedUser) {
@@ -77,11 +83,15 @@ export async function updateUserProfileService(
   return updatedUser;
 }
 
-export async function getAuthenticatedUserService(
+export async function getMeService(
   userId: Types.ObjectId
 ): Promise<UserPublicType> {
   const user = await findUserById(userId);
-  const publicUser = userPublicSchema.parse(user.toObject());
+  const userObject = user.toObject();
+  const publicUser = userPublicSchema.parse({
+    ...userObject,
+    _id: userObject._id.toString(),
+  });
 
   return publicUser;
 }
