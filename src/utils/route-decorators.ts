@@ -18,10 +18,13 @@ export function registerAdminRoutes(
   app: FastifyInstance,
   routes: FastifyPluginCallback
 ) {
-  app.register((adminRoutes) => {
-    adminRoutes.addHook('preHandler', validateAuth);
-    adminRoutes.addHook('preHandler', validateAdminAuth);
-    adminRoutes.addHook('onSend', renewToken);
-    adminRoutes.register(routes);
-  });
+  app.register(
+    (adminRoutes) => {
+      adminRoutes.addHook('preHandler', validateAuth);
+      adminRoutes.addHook('preHandler', validateAdminAuth);
+      adminRoutes.addHook('onSend', renewToken);
+      adminRoutes.register(routes);
+    },
+    { prefix: '/admin' }
+  );
 }

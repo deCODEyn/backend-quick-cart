@@ -95,3 +95,19 @@ export async function getMeService(
 
   return publicUser;
 }
+
+export async function changePasswordService(
+  userId: Types.ObjectId,
+  currentPassword: string,
+  newPassword: string
+) {
+  const user = await findUserById(userId);
+  const isMatch = await user.comparePassword(currentPassword);
+  if (!isMatch) {
+    throw new UnauthorizedError('Incorrect password.');
+  }
+  user.password = newPassword;
+  await user.save();
+
+  return;
+}

@@ -24,13 +24,23 @@ export const loginBodySchema = userSchema
   });
 export type LoginBodyType = z.infer<typeof loginBodySchema>;
 
-export const updateUserProfileSchema = userSchema.omit({
-  name: true,
-  password: true,
-  role: true,
-  addresses: true,
-  profileImage: true,
-}).extend({
-  currentPassword: z.string().min(1, 'A senha atual é obrigatória.'),
-});
+export const updateUserProfileSchema = userSchema
+  .omit({
+    name: true,
+    password: true,
+    role: true,
+    addresses: true,
+    profileImage: true,
+  })
+  .extend({
+    currentPassword: z.string().min(1, 'The current password is required.'),
+  });
 export type updateUserProfileType = z.infer<typeof updateUserProfileSchema>;
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, 'The current password is required.'),
+  newPassword: z
+    .string()
+    .min(8, 'The new password must be at least 8 characters long.'),
+});
+export type ChangePasswordType = z.infer<typeof changePasswordSchema>;

@@ -44,9 +44,9 @@ export function orderRoutes(app: FastifyInstance) {
   });
 
   registerAdminRoutes(app, (adminRoutes) => {
-    adminRoutes.get('/admin', listAllOrders);
+    adminRoutes.get('/', listAllOrders);
     adminRoutes.patch(
-      '/admin/:id/status',
+      '/:id/status',
       {
         schema: {
           params: getOrderParamsSchema,

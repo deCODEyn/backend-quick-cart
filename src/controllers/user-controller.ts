@@ -1,5 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type {
+  ChangePasswordType,
   LoginBodyType,
   RegisterBodyType,
   updateUserProfileType,
@@ -10,6 +11,7 @@ import {
 } from '../services/helpers/user-helpers.ts';
 import {
   authenticateUser,
+  changePasswordService,
   createUser,
   getMeService,
   updateUserProfileService,
@@ -105,6 +107,20 @@ export async function updateUserProfile(
   return reply.status(200).send({
     message: 'Updated profile successfully',
     result: await updateUserProfileService(userId, updateData),
+    success: true,
+  });
+}
+
+export async function changePassword(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const userId = getUserId(request.user);
+  const { currentPassword, newPassword } = request.body as ChangePasswordType;
+  await changePasswordService(userId, currentPassword, newPassword);
+
+  return reply.status(200).send({
+    message: 'Password changed successfully.',
     success: true,
   });
 }
