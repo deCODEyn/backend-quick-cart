@@ -12,7 +12,7 @@ const socialMediaSchema = z.object({
   facebook: z.string().optional(),
   X: z.string().optional(),
   linkedIn: z.string().optional(),
-  whatsApp: numericString().optional(),
+  whatsApp: numericString(10),
 });
 
 const addressSchema = z.object({
@@ -32,7 +32,7 @@ export const userSchema = z.object({
   lastName: z.string().optional(),
   cpf: cpfSchema,
   rg: rgSchema,
-  phoneNumber: numericString().optional(),
+  phoneNumber: numericString(10),
   socialMedia: socialMediaSchema.optional(),
   addresses: z.array(addressSchema).optional(),
   profileImage: z.string().optional(),

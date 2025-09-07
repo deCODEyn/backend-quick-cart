@@ -7,13 +7,13 @@ import {
   userPublicSchema,
 } from '../schemas/user-schema.ts';
 import type { ProcessedFile } from '../types/global-types.ts';
-import { NotFoundError, UnauthorizedError } from '../utils/errors.ts';
+import { NotFoundError } from '../utils/errors.ts';
 import { signToken } from '../utils/jwt.ts';
 import {
   deleteImagesFromCloudinary,
   uploadImagesToCloudinary,
 } from './external-services/cloudinary-service.ts';
-import { findUserById } from './helpers/user-helpers.ts';
+import { findUserById, verifyPassword } from './helpers/user-helpers.ts';
 
 export async function createUser(userData: UserType): Promise<UserPublicType> {
   const newUser = new userModel(userData);
@@ -31,8 +31,7 @@ export async function authenticateUser(
   if (!user) {
     return null;
   }
-  const isMatch = await user.comparePassword(passwordFromRequest);
-  if (!isMatch) {
+  if (!(await verifyPassword(user, passwordFromRequest, false))) {
     return null;
   }
   const token = signToken({
@@ -65,12 +64,9 @@ export async function updateUserProfileService(
   userId: Types.ObjectId,
   updateData: updateUserProfileType
 ): Promise<UserDocumentInterface> {
-  const user = await findUserById(userId);
+  const user = await findUserById(userId, true);
   const { currentPassword, ...dataToUpdate } = updateData;
-  const isMatch = await user.comparePassword(currentPassword);
-  if (!isMatch) {
-    throw new UnauthorizedError('Incorrect password.');
-  }
+  await verifyPassword(user, currentPassword);
   const updatedUser = await userModel.findOneAndUpdate(
     { _id: userId },
     { $set: dataToUpdate },
@@ -100,12 +96,9 @@ export async function changePasswordService(
   userId: Types.ObjectId,
   currentPassword: string,
   newPassword: string
-) {
-  const user = await findUserById(userId);
-  const isMatch = await user.comparePassword(currentPassword);
-  if (!isMatch) {
-    throw new UnauthorizedError('Incorrect password.');
-  }
+): Promise<void> {
+  const user = await findUserById(userId, true);
+  await verifyPassword(user, currentPassword);
   user.password = newPassword;
   await user.save();
 

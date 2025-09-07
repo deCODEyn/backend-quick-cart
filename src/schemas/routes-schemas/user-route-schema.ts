@@ -33,6 +33,7 @@ export const updateUserProfileSchema = userSchema
     profileImage: true,
   })
   .extend({
+    email: z.email().optional(),
     currentPassword: z.string().min(1, 'The current password is required.'),
   });
 export type updateUserProfileType = z.infer<typeof updateUserProfileSchema>;

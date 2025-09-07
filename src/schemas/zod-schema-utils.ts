@@ -35,24 +35,19 @@ export type ValidSizeLiterals = z.infer<typeof sizeEnumSchema>;
 export function numericString(minLength = 1) {
   return z
     .string()
-    .min(minLength)
-    .transform((val) => val.replace(/\D/g, ''));
+    .optional()
+    .transform((val) => val?.replace(/\D/g, ''))
+    .refine((val) => !val || val.length >= minLength, {
+      message: `Must have at least ${minLength} digits.`,
+    });
 }
 
-export const cpfSchema = numericString(11)
-  .optional()
-  .refine(
-    (val) => {
-      return val ? isCpfValid(val) : true;
-    },
-    { message: 'Invalid CPF.' }
-  );
+export const cpfSchema = numericString(11).refine(
+  (val) => !val || isCpfValid(val),
+  { message: 'Invalid CPF.' }
+);
 
-export const rgSchema = numericString(7)
-  .optional()
-  .refine(
-    (val) => {
-      return val ? isRgValid(val) : true;
-    },
-    { message: 'Invalid RG.' }
-  );
+export const rgSchema = numericString(7).refine(
+  (val) => !val || isRgValid(val),
+  { message: 'Invalid RG.' }
+);
