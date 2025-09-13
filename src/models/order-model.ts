@@ -57,7 +57,7 @@ const OrderDBSchema = new mongoose.Schema<
       type: String,
       required: true,
       enum: VALID_ORDER_STATUSES_ENUM,
-      default: 'Order Placed',
+      default: 'Order placed',
     },
     deliveryFee: { type: Number, required: true },
     paymentMethod: { type: String, required: true },

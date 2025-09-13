@@ -10,6 +10,7 @@ import type {
 import { BadRequestError, NotFoundError } from '../utils/errors.ts';
 import { getAndMinimizeAddress } from './helpers/address-helper.ts';
 import { findOrderOrThrow, formatOrderItems } from './helpers/order-helper.ts';
+import { processPayment } from './payments/payment-processor.ts';
 
 export async function createOrderService(
   userId: Types.ObjectId,
@@ -27,6 +28,7 @@ export async function createOrderService(
     userId,
   });
   const savedOrder = await newOrder.save();
+  await processPayment(orderData, paymentMethod);
 
   return savedOrder;
 }
@@ -50,10 +52,10 @@ export async function updateOrderService(
   adressId: Types.ObjectId
 ): Promise<OrderDocumentInterface> {
   const order = await findOrderOrThrow(orderId, userId);
-  const allowedStatuses = ['Order Placed', 'Ready to ship'];
+  const allowedStatuses = ['Order placed', 'Ready to ship'];
   if (!allowedStatuses.includes(order.status as string)) {
     throw new BadRequestError(
-      `Cannot update order with status '${order.status}'. Only orders with status 'Order Placed' or 'Ready to ship' can be updated.`
+      `Cannot update order with status '${order.status}'. Only orders with status 'Order placed' or 'Ready to ship' can be updated.`
     );
   }
   const updateAddress = await getAndMinimizeAddress(adressId, userId);

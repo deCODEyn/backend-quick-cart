@@ -30,6 +30,7 @@
     "fastify-type-provider-zod": "^5.0.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.17.0",
+    "stripe": "^18.5.0",
     "zod": "^4.0.14"
   }
 }

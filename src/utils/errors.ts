@@ -23,6 +23,12 @@ export class BadRequestError extends AppError {
   }
 }
 
+export class UnsupportedPaymentMethodError extends AppError {
+  constructor(method: string) {
+    super(`Unsupported payment method: ${method}`, 400);
+  }
+}
+
 export class UnauthorizedError extends AppError {
   constructor(message = 'Unauthorized request.') {
     super(message, 401);

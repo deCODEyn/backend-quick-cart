@@ -15,7 +15,7 @@ export const MAX_PRODUCT_IMAGES = 4;
 
 //Orders and Status
 export const VALID_ORDER_STATUSES_ENUM = [
-  'Order Placed',
+  'Order placed',
   'Ready to ship',
   'Shipped',
   'Delivered',
